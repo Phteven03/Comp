@@ -3,19 +3,19 @@
 #include <functional>
 #include <vector>
 #include "mathfunc.h"
-
-
-using namespace std;
+#include "matplot/matplot.h"
+#include "plots.h"
+#include "vectormath.h"
 
 // Function for the original integrand
 // This function computes the value of the integrand 1 / sqrt(1 - y^4) for a given y
 static double integrand_(double y) {
-    return 1 / sqrt(1 - pow(y, 4));
+    return 1 / std::sqrt(1 - std::pow(y, 4));
 }
 
 // Implementation of the trapezoidal rule for numerical integration
 // a and b are the integration bounds, n is the number of subdivisions, and integrand is the function to be integrated
-static double trapezoidRule_(double a, double b, int n, function<double(double)> integrand) {
+static double trapezoidRule_(double a, double b, int n, std::function<double(double)> integrand) {
     double stepWidth = (b - a) / n;  // Step width for subdivision
     double trapIntegralValue = 0;  // Result of the trapezoidal integration
     for (int i = 1; i < n; ++i) {
@@ -26,9 +26,7 @@ static double trapezoidRule_(double a, double b, int n, function<double(double)>
     return trapIntegralValue;  // Return the result of the integration
 }
 
-// Implementation of Simpson's rule for numerical integration
-// a and b are the integration bounds, n is the number of subdivisions, and integrand is the function to be integrated
-static double simpsonRule_(double a, double b, int n, function<double(double)> integrand) {
+static double simpsonRule_(double a, double b, int n, std::function<double(double)> integrand) {
     double simpIntegralValue = 0;  // Result of Simpson's integration
     double stepWidth = (b - a) / n;  // Step width for subdivision
     double oddSumValue = 0;  // Sum of function values at odd indices
@@ -45,12 +43,11 @@ static double simpsonRule_(double a, double b, int n, function<double(double)> i
     }
 
     // Simpson's formula, which combines the function values at the boundaries, odd, and even points
-    simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b - pow(b, (-10))));
+    simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b - std::pow(b, (-10))));
     return simpIntegralValue;  // Return the result of the integration
 }
 
-
-static double gaussianQudrature_(double a, double b, double n, function<double(double)> integrand) {
+static double gaussianQudrature_(double a, double b, double n, std::function<double(double)> integrand) {
 
     double gaussIntValue = 0;
     std::vector<double> weights(n);
@@ -69,33 +66,52 @@ static double gaussianQudrature_(double a, double b, double n, function<double(d
     gaussIntValue = (b - a) / 2 * gaussIntValue;
     return gaussIntValue;
 }
- 
+
+
 int main() {
-    double a = 0;
-    double b = 1;
-    int n = 38;
-
-    double gaussIntValue = gaussianQudrature_(a, b, n, integrand_);
-    cout << "Gauss: " << gaussIntValue << endl;
+    const double a = 0;
+    const double b = 1;
+    const int n = 30;
+    const double REALINTVALUE = 1.311028777146120;
 
 
-    double trapResult = trapezoidRule_(a, b, n, integrand_);
-    double simpResult = simpsonRule_(a, b, n, integrand_);
+    std::vector<int> nVector;
+    for (int i = 1; i <= n; ++i) {
+        nVector.push_back(i);
+    }
 
-    cout << "Trap: " << trapResult << endl;
-    cout << "Simp: " << simpResult << endl;
+    std::vector<double> gaussIntVector;
+    std::vector<double> trapIntVector;
+    std::vector<double> simpIntVector;
 
-    //double transTrapResult = trapezoidRule_(-1, 1, n, [=](double t) { return transformedIntegrand_(a, b, t); });
-    //double transSimpResult = simpsonRule_(-1, 1, n, [=](double t) { return transformedIntegrand_(a, b, t); });
+    std::vector<double> gaussIntError;
+    std::vector<double> trapIntError;
+    std::vector<double> simpIntError;
 
-    
-    //cout <<  transSimpResult << endl;
+    double trapIntValue = 0.0;
+    double gaussIntValue = 0.0;
+    double simpIntValue = 0.0;
 
-    //double P3 = legendrePn_(0, 3);
-    //cout << P3 << endl;
-    //double dP3 = legendrePnDeriv_(0, 3);
+    double gaussIntErrorV = 0.0;
+    double trapIntErrorV = 0.0;
+    double simpIntErrorV = 0.0;
 
-    //cout << dP3 << endl;
+    for (int i = 0; i < n; ++i) {
+        gaussIntValue = gaussianQudrature_(a, b, i, integrand_);
+        gaussIntVector.push_back(gaussIntValue);
 
+        trapIntValue = trapezoidRule_(a, b, i, integrand_);
+        trapIntVector.push_back(trapIntValue);
 
+        simpIntValue = simpsonRule_(a, b, i, integrand_);
+        simpIntVector.push_back(simpIntValue);
+    }
+
+    matplot::plot(nVector, gaussIntVector);
+    matplot::hold(matplot::on);
+    matplot::plot(nVector, trapIntVector);
+    matplot::plot(nVector, simpIntVector);
+    matplot::xlabel("N");
+    matplot::ylabel("Error");
+    matplot::show();
 }

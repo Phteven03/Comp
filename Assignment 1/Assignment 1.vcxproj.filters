@@ -21,12 +21,21 @@
     <ClCompile Include="mathfunc.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="plots.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matplotlibcpp.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="mathfunc.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="plots.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

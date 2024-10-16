@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 #include "mathfunc.h"
+#include "vectormath.h"
 
 double factorial_(double x) {
     double result = 1.0;
@@ -33,13 +34,8 @@ std::vector<double> legendrePn_(int l) {
 
     for (int i = 0; i <= floor(l / 2.0); ++i) {
         int index = l - 2 * i;
-
-        double logNumerator = logFactorial_(2 * l - 2 * i);
-        double logDenominator = logFactorial_(l - i) + logFactorial_(l - 2 * i) + logFactorial_(i) + (l * std::log(2));
-
-        polfac[index] = pow(-1, i) * exp(logNumerator - logDenominator);
+        polfac[index] = pow((-1), i) * factorial_(2 * l - 2 * i) / (factorial_(l - i) * factorial_(l - 2 * i) * factorial_(i) * pow(2, l));
     }
-
     return polfac;
 }
 
@@ -52,7 +48,7 @@ std::vector<double> polyDiff_(std::vector<double> polyFunction) {
 }
 
 std::vector<double> bracketing_(std::vector<double> poly, double leftlimit, double rightlimit) {
-    const double stepwidth = 1e-4;
+    const double stepwidth = 1e-5;
     std::vector<double> significantValues;
 
     double previousValue = evaluatePoly_(poly, leftlimit);
@@ -70,13 +66,13 @@ std::vector<double> bracketing_(std::vector<double> poly, double leftlimit, doub
     return significantValues;
 }
 
-std::vector<double> newtonRaphson_(std::vector<double> polyFunction, std::vector<double> guesses, int n) {
+std::vector<double> newtonRaphson_(std::vector<double> polyFunction, std::vector<double> guesses) {
 
     std::vector<double> roots;
     std::vector<double> f = polyFunction;
     std::vector<double> fPrime = polyDiff_(f);
     double tolerance = 1e-6;
-    int maxIterations = n;
+    int maxIterations = 100;
 
     for (int j = 0; j < guesses.size(); ++j) {
 
@@ -101,7 +97,7 @@ std::vector<double> polyRootFinder_(std::vector<double> poly, double n, double l
     std::vector<double> guess = bracketing_(poly, leftlimit, rightlimit);
     size_t numberOfRoots = guess.size(); 
     std::vector<double> polyRoot(numberOfRoots);
-    polyRoot = newtonRaphson_(poly, guess, n);
+    polyRoot = newtonRaphson_(poly, guess);
     return polyRoot;
 }
 
