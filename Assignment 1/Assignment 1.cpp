@@ -2,28 +2,31 @@
 #include <cmath>
 #include <functional>
 #include <vector>
-#include "mathfunc.h"
-#include "matplot/matplot.h"
-#include "plots.h"
+#include <chrono>
 #include "vectormath.h"
+#include "matplot/matplot.h"
 
-// Function for the original integrand
-// This function computes the value of the integrand 1 / sqrt(1 - y^4) for a given y
-static double integrand_(double y) {
+//exercise 1
+#include "mathfunc1a.h"
+#include "plot1a.h"
+#include "mathfunc2a.h"
+
+double PI = 3.14159265359;
+
+//exercise 1a
+
+static double integrand1a_(double y) {
     return 1 / std::sqrt(1 - std::pow(y, 4));
 }
 
-// Implementation of the trapezoidal rule for numerical integration
-// a and b are the integration bounds, n is the number of subdivisions, and integrand is the function to be integrated
 static double trapezoidRule_(double a, double b, int n, std::function<double(double)> integrand) {
-    double stepWidth = (b - a) / n;  // Step width for subdivision
-    double trapIntegralValue = 0;  // Result of the trapezoidal integration
+    double stepWidth = (b - a) / n;
+    double trapIntegralValue = 0;
     for (int i = 1; i < n; ++i) {
-        // The value is computed by summing the trapezoidal areas using the midpoint rule
         trapIntegralValue += ((integrand(a) + integrand(a + stepWidth)) / 2) * stepWidth;
-        a += stepWidth;  // Increment the integration bound step by step
+        a += stepWidth;
     }
-    return trapIntegralValue;  // Return the result of the integration
+    return trapIntegralValue;
 }
 
 static double simpsonRule_(double a, double b, int n, std::function<double(double)> integrand) {
@@ -44,20 +47,19 @@ static double simpsonRule_(double a, double b, int n, std::function<double(doubl
 
     // Simpson's formula, which combines the function values at the boundaries, odd, and even points
     simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b - std::pow(b, (-10))));
-    return simpIntegralValue;  // Return the result of the integration
+    return simpIntegralValue;
 }
 
 static double gaussianQudrature_(double a, double b, double n, std::function<double(double)> integrand) {
 
     double gaussIntValue = 0;
+
     std::vector<double> weights(n);
     std::vector<double> roots(n);
-    std::vector<double> legPoly(n + 1);
 
-    legPoly = legendrePn_(n);
-    roots = polyRootFinder_(legPoly, n, -1, 1);
-    weights = gaussLegendreWeight_(legPoly,roots);
 
+    roots = legendreRootFinder_(-1, 1, n);
+    weights = gaussLegendreWeight_(roots, n);
 
     for (int i = 0; i < n; ++i) {
         double transform = ((b - a) / 2) * roots[i] + ((a + b) / 2);
@@ -67,18 +69,25 @@ static double gaussianQudrature_(double a, double b, double n, std::function<dou
     return gaussIntValue;
 }
 
+//exercise 1b
+
+static double integrand1b1_(double x, double a) {
+    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+}
+static double integrand1b2_(double x, double a) {
+    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+}
+static double integrand1b3_(double x, double a) {
+    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+}
 
 int main() {
+
+    //exercise 1a
     const double a = 0;
     const double b = 1;
-    const int n = 30;
+    const double n = 100;
     const double REALINTVALUE = 1.311028777146120;
-
-
-    std::vector<int> nVector;
-    for (int i = 1; i <= n; ++i) {
-        nVector.push_back(i);
-    }
 
     std::vector<double> gaussIntVector;
     std::vector<double> trapIntVector;
@@ -97,21 +106,35 @@ int main() {
     double simpIntErrorV = 0.0;
 
     for (int i = 0; i < n; ++i) {
-        gaussIntValue = gaussianQudrature_(a, b, i, integrand_);
+        gaussIntValue = gaussianQudrature_(a, b, i, integrand1a_);
         gaussIntVector.push_back(gaussIntValue);
 
-        trapIntValue = trapezoidRule_(a, b, i, integrand_);
+        trapIntValue = trapezoidRule_(a, b, i, integrand1a_);
         trapIntVector.push_back(trapIntValue);
 
-        simpIntValue = simpsonRule_(a, b, i, integrand_);
+        simpIntValue = simpsonRule_(a, b, i, integrand1a_);
         simpIntVector.push_back(simpIntValue);
     }
 
-    matplot::plot(nVector, gaussIntVector);
-    matplot::hold(matplot::on);
-    matplot::plot(nVector, trapIntVector);
-    matplot::plot(nVector, simpIntVector);
-    matplot::xlabel("N");
-    matplot::ylabel("Error");
-    matplot::show();
+    //plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n);
+
+
+    //exercise 1b
+    std::vector<double> intVector2a1;
+    for (double a = 1; a < PI; a += PI/1e-1) {
+
+        auto integrand_with_fixed_a = [a](double x) {
+            return integrand1b1_(x, a);
+            };
+        double intVal2a1 = gaussianQudrature_(0, PI, 10, integrand_with_fixed_a);
+        intVector2a1.push_back(intVal2a1);
+    }
+    printVector(intVector2a1);
+   
+
+    /*const int n = 100;
+    plotresult1a_(n);*/
+
+
+
 }

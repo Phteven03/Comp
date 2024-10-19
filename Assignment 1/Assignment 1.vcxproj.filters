@@ -18,10 +18,13 @@
     <ClCompile Include="Assignment 1.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="mathfunc.cpp">
+    <ClCompile Include="mathfunc1a.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="plots.cpp">
+    <ClCompile Include="plot1a.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="mathfunc2a.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,13 +32,16 @@
     <ClInclude Include="matplotlibcpp.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="mathfunc.h">
+    <ClInclude Include="mathfunc1a.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="plots.h">
+    <ClInclude Include="plot1a.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="vectormath.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="mathfunc2a.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
