@@ -72,13 +72,13 @@ static double gaussianQudrature_(double a, double b, double n, std::function<dou
 //exercise 1b
 
 static double integrand1b1_(double x, double a) {
-    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+    return (std::sqrt(cosh(a) - std::cosh(x))) / (cosh(a) - std::cosh(x));
 }
 static double integrand1b2_(double x, double a) {
-    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+    return 1 / (std::exp(a) - std::exp(abs(x)));
 }
 static double integrand1b3_(double x, double a) {
-    return 1 / std::sqrt(std::cosh(a) - std::cosh(x));
+    return 1 / std::sqrt(std::cos(x) - std::cos(a));
 }
 
 int main() {
@@ -120,16 +120,36 @@ int main() {
 
 
     //exercise 1b
-    std::vector<double> intVector2a1;
-    for (double a = 1; a < PI; a += PI/1e-1) {
+    std::vector<std::vector<double>> allIntegrals;
+    for (double a = 0; a <= PI; a += (PI / 1e2)) {
 
-        auto integrand_with_fixed_a = [a](double x) {
-            return integrand1b1_(x, a);
-            };
-        double intVal2a1 = gaussianQudrature_(0, PI, 10, integrand_with_fixed_a);
-        intVector2a1.push_back(intVal2a1);
+        std::vector<std::function<double(double)>> integrandFixedA = {
+            [a](double x) { return integrand1b1_(x, a); },
+            [a](double x) { return integrand1b2_(x, a); },
+            [a](double x) { return integrand1b3_(x, a); }
+        };
+
+        std::vector<double> intVectorForA;
+
+        for (const auto& integrand : integrandFixedA) {
+            double intVal = gaussianQudrature_(0, a, 50, integrand);
+            intVectorForA.push_back(intVal);
+        }
+
+        allIntegrals.push_back(intVectorForA);
     }
-    printVector(intVector2a1);
+
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
+    }
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
+    }
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
+    }
+
+
    
 
     /*const int n = 100;
