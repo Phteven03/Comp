@@ -52,7 +52,7 @@ double legendrePnDiff_(double x, int n) {
     }
 }
 
-std::vector<double> bracketing_(double leftlimit, double rightlimit , double n) {
+std::vector<double> legendreBracketing_(double leftlimit, double rightlimit , double n) {
     const double stepwidth = 1e-5;
     double significantValue = 0;
     std::vector<double> guesses;
@@ -73,7 +73,7 @@ std::vector<double> bracketing_(double leftlimit, double rightlimit , double n) 
 
 }
 
-std::vector<double> newtonRaphson_(std::vector<double> guesses, double n) {
+std::vector<double> legendreNewtonRaphson_(std::vector<double> guesses, double n) {
 
     std::vector<double> roots;
 
@@ -106,8 +106,8 @@ std::vector<double> newtonRaphson_(std::vector<double> guesses, double n) {
 
 std::vector<double> legendreRootFinder_(double leftlimit, double rightlimit, double n) {
 
-    std::vector<double> guesses = bracketing_(leftlimit, rightlimit , n);
-    std::vector<double> roots = newtonRaphson_(guesses , n);
+    std::vector<double> guesses = legendreBracketing_(leftlimit, rightlimit , n);
+    std::vector<double> roots = legendreNewtonRaphson_(guesses , n);
     return roots;
 }
 
