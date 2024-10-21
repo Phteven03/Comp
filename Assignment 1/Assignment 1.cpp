@@ -145,9 +145,8 @@ int main() {
     }
     plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n);*/
 
-
     //exercise 1b
-    std::vector<std::vector<double>> allIntegrals;
+    /*std::vector<std::vector<double>> allIntegrals;
     int n1b = 50; 
     for (double a = 0; a <= PI; a += (PI / 1e2)) {
 
@@ -169,7 +168,7 @@ int main() {
 
     plotresult1b_(allIntegrals);
 
-    /*for (size_t i = 0; i < allIntegrals.size(); ++i) {
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
         std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
     }
     for (size_t i = 0; i < allIntegrals.size(); ++i) {
@@ -180,28 +179,50 @@ int main() {
     }*/
 
     ////exercise 1c 
+    /*std::vector<double> potential1c1Vector;
+    std::vector<double> potential1c05Vector;
+    for (double k = 0; k <= 20; ++k) {
 
-    //std::vector<double> potential1c1Vector;
-    //std::vector<double> potential1c05Vector;
-    //for (double k = 0; k <= 20; ++k) {
+        auto integrandFixedK = [k](double x) { return integrand1c1_(x, k); };
+        double potential1c1 = gaussianQudrature_(0, 1, 50, integrandFixedK);
+        potential1c1Vector.push_back(potential1c1);
 
-    //    auto integrandFixedK = [k](double x) { return integrand1c1_(x, k); };
-    //    double potential1c1 = gaussianQudrature_(0, 1, 50, integrandFixedK);
-    //    potential1c1Vector.push_back(potential1c1);
-
-    //    auto integrandFixedK05 = [k](double x) { return integrand1c2_(x, k); };
-    //    double potential1c05 = gaussianQudrature_(0, 0.5, 50, integrandFixedK05);
-    //    potential1c05Vector.push_back(potential1c05);
-    //}
-    //printVector(potential1c1Vector);
-    //printVector(potential1c05Vector);
-
+        auto integrandFixedK05 = [k](double x) { return integrand1c2_(x, k); };
+        double potential1c05 = gaussianQudrature_(0, 0.5, 50, integrandFixedK05);
+        potential1c05Vector.push_back(potential1c05);
+    }
+    printVector(potential1c1Vector);
+    printVector(potential1c05Vector);*/
+    
 
     //exercise 2a
+    std::vector<double> functiontest = { 6, -5, 1 };
+    std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
+    std::vector<double> convergenceBisection = bisectonConvergence_(function2a, -3, 3);
 
-    /*std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
+    std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
     printVector(rootsbis);
     std::vector<double> rootsnet = polyRootNewtonRaphson_(function2a, -3, 3);
-    printVector(rootsnet);*/
+    printVector(rootsnet);
+
+    //plotresult2a_(convergenceBisection, convergenceNewton);
+
+    //exercise 2b 
+
+    std::vector<double> errorIVec;
+    std::vector<double> errorIp1Vec;
+    for (size_t i = 0; i < convergenceNewton.size() - 1; ++i) {
+        double errorI = std::log(std::abs(convergenceNewton[i] - convergenceNewton[convergenceNewton.size()]));
+        errorIVec.push_back(errorI);
+        double errorIp1 = std::log(std::abs(convergenceNewton[i + 1] - convergenceNewton[convergenceNewton.size()]));
+        errorIp1Vec.push_back(errorIp1);
+    }
+
+    //double k = errorIVec[]
+
+    //plotresult2b_(errorIVec, errorIp1Vec);
+    
+
+
 
 }

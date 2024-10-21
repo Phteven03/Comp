@@ -50,3 +50,25 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals) {
 	matplot::show();
 }
 
+void plotresult2a_(std::vector<double> convergenceBisection, std::vector<double> convergenceNewton) {
+	size_t size = convergenceBisection.size();
+	std::vector<double> nVector;
+	for (size_t j = 0; j < size; ++j) {
+		nVector.push_back(j);
+	}
+
+	matplot::plot(nVector, convergenceBisection);
+	matplot::hold(matplot::on);
+	matplot::plot(nVector, convergenceNewton);
+	matplot::hold(matplot::off);
+	matplot::legend({ "Bisection" , "Newton" });
+	matplot::grid(matplot::on);
+	matplot::show();
+}
+
+void plotresult2b_(std::vector<double> errorI, std::vector<double> errorIp1) {
+
+	matplot::loglog(errorIp1, errorI);
+	matplot::grid(matplot::on);
+	matplot::show();
+}
