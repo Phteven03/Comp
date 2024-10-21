@@ -24,7 +24,7 @@ std::vector<double> polyDiff_(std::vector<double> polyFunction) {
 }
 
 std::vector<std::vector<double>> bracketing_(std::vector<double> poly, double leftlimit, double rightlimit) {
-    const double stepwidth = 1e-4;
+    const double stepwidth = 1e-3;
     std::vector<std::vector<double>> significantIntervalls;
     double previousValue = evaluatePoly_(poly, leftlimit);
     double previousX = leftlimit;
@@ -44,7 +44,7 @@ std::vector<std::vector<double>> bracketing_(std::vector<double> poly, double le
 
 std::vector<std::vector<double>> bisection_(std::vector<double> poly, std::vector<std::vector<double>> guessIntervalls) {
     std::vector<std::vector<double>> convergenceSteps;
-    double tolerance = 1e-8;
+    double tolerance = 1e-6;
 
     for (const auto& interval : guessIntervalls) {
         double leftLimit = interval[0];
@@ -94,7 +94,7 @@ std::vector<std::vector<double>> newtonRaphson_(std::vector<double> polyFunction
 
     std::vector<double> f = polyFunction;
     std::vector<double> fPrime = polyDiff_(f);
-    double tolerance = 1e-9;
+    double tolerance = 1e-6;
     int maxIterations = n;
 
     for (const auto& interval : guessIntervalls) {

@@ -98,10 +98,10 @@ static double potential_(double k, double x, double d) {
     return std::tanh(k * x);
 }
 static double integrand1c1_(double x, double k) {
-    return 1 / std::sqrt(std::tanh(k) - std::tanh(k * x));
+    return 1 / std::sqrt(std::tanh(1) - std::tanh(k * x));
 }
 static double integrand1c2_(double x, double k) {
-    return 1 / std::sqrt(std::tanh(k / 2.0) - std::tanh(k * x));
+    return 1 / std::sqrt(std::tanh(1 / 2.0) - std::tanh(k * x));
 }
 
 
@@ -110,7 +110,7 @@ double mu = 3e-6;
 std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 
 //exercise 3a
-std::vector<double> randpoly = generateRandomNumbers(7);
+
 
 
 int main() {
@@ -185,7 +185,7 @@ int main() {
     }*/
 
     ////exercise 1c 
-    /*std::vector<double> potential1c1Vector;
+    std::vector<double> potential1c1Vector;
     std::vector<double> potential1c05Vector;
     for (double k = 0; k <= 20; ++k) {
 
@@ -198,10 +198,9 @@ int main() {
         potential1c05Vector.push_back(potential1c05);
     }
     printVector(potential1c1Vector);
-    printVector(potential1c05Vector);*/
+    printVector(potential1c05Vector);
 
-
-    //exercise 2ab
+    //exercise 2a
     /*std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
     std::vector<double> convergenceBisection = bisectonConvergence_(function2a, -3, 3);
 
@@ -210,10 +209,10 @@ int main() {
     std::vector<double> rootsnet = polyRootNewtonRaphson_(function2a, -3, 3);
     printVector(rootsnet);
 
-    plotresult2a_(convergenceBisection, convergenceNewton);
+    plotresult2a_(convergenceBisection, convergenceNewton);*/
 
     //exercise 2b 
-    std::vector<double> errorIVec;
+    /*std::vector<double> errorIVec;
     std::vector<double> errorIp1Vec;
 
     for (size_t i = 0 ; i < convergenceNewton.size(); ++i) {
@@ -226,13 +225,20 @@ int main() {
 
     double k = (errorIVec[1] - errorIVec.back()) / (errorIp1Vec[1] - errorIp1Vec.back());
     std::cout << k << std::endl;
-    plotresult2b_(errorIVec, errorIp1Vec);*/
+    plotresult2b_(errorIVec, errorIp1Vec); */
 
-    //exercise  3a
-std::vector<double> testfunction = { 0,0,1 };
-std::vector<double> roots = polyRootNewtonRaphson_(testfunction, -10, 10);
-//printVector(randpoly);
-printVector(roots);
+    //exercise  3ab
+    /*std::vector<double> rootsNumberVec;
+    for (int i = 0; i < 1000; ++i) {
+        std::vector<double> randpoly = generateRandomNumbers(7);
+        std::vector<double> roots = polyRootNewtonRaphson_(randpoly, -10, 10);
+        size_t rootNumber = roots.size();
+        rootsNumberVec.push_back(rootNumber);
+    }
+    double sum = std::accumulate(rootsNumberVec.begin(), rootsNumberVec.end(), 0.0);
+    double average = sum / rootsNumberVec.size();
+    std::cout << average << std::endl;
+    //printVector(randpoly);*/
     
     
     

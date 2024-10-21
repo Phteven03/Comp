@@ -46,7 +46,6 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals) {
 	matplot::ylabel("");
 	auto legend = matplot::legend({ "V(x) = cosh(x)", "V(x) = exp(|x|)", "V(x) = -cos(x)" }); 
 	legend->location(matplot::legend::general_alignment::topleft);
-	matplot::grid(matplot::on);
 	matplot::show();
 }
 
