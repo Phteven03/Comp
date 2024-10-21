@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <random>
 
 double evaluatePoly_(std::vector<double> poly, double x);
 
@@ -19,5 +20,7 @@ std::vector<double> newtonConvergence_(std::vector<double> poly, double leftLimi
 std::vector<double> polyRootBisection_(std::vector<double> poly, double leftLimit, double rightLimit);
 
 std::vector<double> polyRootNewtonRaphson_(std::vector<double> poly, double leftLimit, double rightLimit);
+
+std::vector<double> generateRandomNumbers(int numSamples);
 
 //std::vector<double> polyRootFinder_(std::vector<double> poly, double n, double leftlimit, double rightlimit); 

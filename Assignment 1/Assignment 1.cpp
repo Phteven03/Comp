@@ -21,6 +21,9 @@
 //exercise 2
 #include "mathfunc2a.h"
 
+//exercise 3
+#include <random>
+
 
 const double PI = 3.14159265359;
 const double SINGULARITY_ERROR_TERM = 1e-5;
@@ -106,6 +109,9 @@ static double integrand1c2_(double x, double k) {
 double mu = 3e-6;
 std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 
+//exercise 3a
+std::vector<double> randpoly = generateRandomNumbers(7);
+
 
 int main() {
 
@@ -147,7 +153,7 @@ int main() {
 
     //exercise 1b
     /*std::vector<std::vector<double>> allIntegrals;
-    int n1b = 50; 
+    int n1b = 50;
     for (double a = 0; a <= PI; a += (PI / 1e2)) {
 
         std::vector<std::function<double(double)>> integrandFixedA = {
@@ -193,11 +199,10 @@ int main() {
     }
     printVector(potential1c1Vector);
     printVector(potential1c05Vector);*/
-    
 
-    //exercise 2a
-    std::vector<double> functiontest = { 6, -5, 1 };
-    std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
+
+    //exercise 2ab
+    /*std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
     std::vector<double> convergenceBisection = bisectonConvergence_(function2a, -3, 3);
 
     std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
@@ -205,24 +210,30 @@ int main() {
     std::vector<double> rootsnet = polyRootNewtonRaphson_(function2a, -3, 3);
     printVector(rootsnet);
 
-    //plotresult2a_(convergenceBisection, convergenceNewton);
+    plotresult2a_(convergenceBisection, convergenceNewton);
 
     //exercise 2b 
-
     std::vector<double> errorIVec;
     std::vector<double> errorIp1Vec;
-    for (size_t i = 0; i < convergenceNewton.size() - 1; ++i) {
-        double errorI = std::log(std::abs(convergenceNewton[i] - convergenceNewton[convergenceNewton.size()]));
+
+    for (size_t i = 0 ; i < convergenceNewton.size(); ++i) {
+        double trueRoot = convergenceNewton.back();
+        double errorI = std::abs(convergenceNewton[i] - trueRoot);
         errorIVec.push_back(errorI);
-        double errorIp1 = std::log(std::abs(convergenceNewton[i + 1] - convergenceNewton[convergenceNewton.size()]));
+        double errorIp1 = std::abs(convergenceNewton[i+1] - trueRoot);
         errorIp1Vec.push_back(errorIp1);
     }
 
-    //double k = errorIVec[]
+    double k = (errorIVec[1] - errorIVec.back()) / (errorIp1Vec[1] - errorIp1Vec.back());
+    std::cout << k << std::endl;
+    plotresult2b_(errorIVec, errorIp1Vec);*/
 
-    //plotresult2b_(errorIVec, errorIp1Vec);
+    //exercise  3a
+std::vector<double> testfunction = { 0,0,1 };
+std::vector<double> roots = polyRootNewtonRaphson_(testfunction, -10, 10);
+//printVector(randpoly);
+printVector(roots);
     
-
-
-
+    
+    
 }

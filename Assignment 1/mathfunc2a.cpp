@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <random>
 #include "mathfunc2a.h"
 
 double evaluatePoly_(std::vector<double> poly, double x) {
@@ -23,7 +24,7 @@ std::vector<double> polyDiff_(std::vector<double> polyFunction) {
 }
 
 std::vector<std::vector<double>> bracketing_(std::vector<double> poly, double leftlimit, double rightlimit) {
-    const double stepwidth = 1e-1;
+    const double stepwidth = 1e-4;
     std::vector<std::vector<double>> significantIntervalls;
     double previousValue = evaluatePoly_(poly, leftlimit);
     double previousX = leftlimit;
@@ -93,7 +94,7 @@ std::vector<std::vector<double>> newtonRaphson_(std::vector<double> polyFunction
 
     std::vector<double> f = polyFunction;
     std::vector<double> fPrime = polyDiff_(f);
-    double tolerance = 1e-8;
+    double tolerance = 1e-9;
     int maxIterations = n;
 
     for (const auto& interval : guessIntervalls) {
@@ -124,7 +125,7 @@ std::vector<std::vector<double>> newtonRaphson_(std::vector<double> polyFunction
 
 std::vector<double> newtonConvergence_(std::vector<double> poly, double leftLimit, double rightLimit) {
     std::vector<std::vector<double>> significantIntervals = bracketing_(poly, leftLimit, rightLimit);
-    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, { significantIntervals }, 100);
+    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, { significantIntervals }, 10000);
 
     return convergenceSteps[0];
 }
@@ -165,3 +166,16 @@ std::vector<double> polyRootNewtonRaphson_(std::vector<double> poly, double left
     polyRoot = newtonRaphson_(poly, guess, n);
     return polyRoot;
 }*/
+
+std::vector<double> generateRandomNumbers(int numSamples) {
+    std::vector<double> randomNumbers;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+
+    for (int i = 0; i < numSamples; ++i) {
+        randomNumbers.push_back(dis(gen));
+    }
+    return randomNumbers;
+}

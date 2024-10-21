@@ -70,5 +70,7 @@ void plotresult2b_(std::vector<double> errorI, std::vector<double> errorIp1) {
 
 	matplot::loglog(errorIp1, errorI);
 	matplot::grid(matplot::on);
+	matplot::xlabel("error i+1");
+	matplot::ylabel("error i");
 	matplot::show();
 }
