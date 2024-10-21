@@ -142,13 +142,13 @@
     <ClCompile Include="Assignment 1.cpp" />
     <ClCompile Include="mathfunc1a.cpp" />
     <ClCompile Include="mathfunc2a.cpp" />
-    <ClCompile Include="plot1a.cpp" />
+    <ClCompile Include="plot1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mathfunc1a.h" />
     <ClInclude Include="mathfunc2a.h" />
     <ClInclude Include="matplotlibcpp.h" />
-    <ClInclude Include="plot1a.h" />
+    <ClInclude Include="plot1.h" />
     <ClInclude Include="vectormath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

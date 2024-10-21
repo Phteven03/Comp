@@ -6,9 +6,17 @@
 #include "vectormath.h"
 #include "matplot/matplot.h"
 
+#ifdef _DEBUG
+#define COMMENT_START /*
+#define COMMENT_END */
+#else 
+#define COMMENT_START
+#define COMMENT_END
+#endif
+
 //exercise 1
 #include "mathfunc1a.h"
-#include "plot1a.h"
+#include "plot1.h"
 
 //exercise 2
 #include "mathfunc2a.h"
@@ -33,22 +41,20 @@ static double trapezoidRule_(double a, double b, int n, std::function<double(dou
     return trapIntegralValue * stepWidth;
 }
 static double simpsonRule_(double a, double b, int n, std::function<double(double)> integrand) {
-    double simpIntegralValue = 0;  // Result of Simpson's integration
-    double stepWidth = (b - a) / n;  // Step width for subdivision
-    double oddSumValue = 0;  // Sum of function values at odd indices
-    double evenSumValue = 0;  // Sum of function values at even indices
+    double simpIntegralValue = 0;
+    double stepWidth = (b - a) / n;
+    double oddSumValue = 0;
+    double evenSumValue = 0;
 
-    // Loop over odd indices to sum function values
     for (int i = 1; i < n; i += 2) {
         oddSumValue += integrand(a + i * stepWidth);
     }
 
-    // Loop over even indices to sum function values
-    for (int i = 2; i < n; i += 2) {
+
+    for (int i = 2; i <= n; i += 2) {
         evenSumValue += integrand(a + i * stepWidth);
     }
 
-    // Simpson's formula, which combines the function values at the boundaries, odd, and even points
     simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b - std::pow(b, (-10))));
     return simpIntegralValue;
 }
@@ -104,10 +110,10 @@ std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 int main() {
 
     //exercise 1a
-    const double a = 0;
+    /*const double a = 0;
     const double b = 1;
-    const double n = 1000;
-    const double REALINTVALUE = 1.311028777146120;
+    const double n = 100;
+
 
     std::vector<double> gaussIntVector;
     std::vector<double> trapIntVector;
@@ -125,49 +131,53 @@ int main() {
     double trapIntErrorV = 0.0;
     double simpIntErrorV = 0.0;
 
-    //for (int i = 1; i < n; ++i) {
-    //    gaussIntValue = gaussianQudrature_(a, b, i, integrand1a_);
-    //    gaussIntVector.push_back(gaussIntValue);
+    for (int i = 1; i < n; ++i) {
+        gaussIntValue = gaussianQudrature_(a, b, i, integrand1a_);
+        gaussIntVector.push_back(gaussIntValue);
 
-    //    trapIntValue = trapezoidRule_(a, b, i, integrand1a_);
-    //    trapIntVector.push_back(trapIntValue);
+        trapIntValue = trapezoidRule_(a, b, i, integrand1a_);
+        trapIntVector.push_back(trapIntValue);
+    }
+    for (int i = 1; i < 2 * n; i += 2)
+    {
+        simpIntValue = simpsonRule_(a , b , i , integrand1a_);
+        simpIntVector.push_back(simpIntValue);
+    }
+    plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n);*/
 
-    //    simpIntValue = simpsonRule_(a, b, i, integrand1a_);
-    //    simpIntVector.push_back(simpIntValue);
-    //}
-    //printVector(trapIntVector);
-    //plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n);
 
+    //exercise 1b
+    std::vector<std::vector<double>> allIntegrals;
+    int n1b = 50; 
+    for (double a = 0; a <= PI; a += (PI / 1e2)) {
 
-    ////exercise 1b
-    //std::vector<std::vector<double>> allIntegrals;
-    //for (double a = 0; a <= PI; a += (PI / 1e2)) {
+        std::vector<std::function<double(double)>> integrandFixedA = {
+            [a](double x) { return integrand1b1_(x, a); },
+            [a](double x) { return integrand1b2_(x, a); },
+            [a](double x) { return integrand1b3_(x, a); }
+        };
 
-    //    std::vector<std::function<double(double)>> integrandFixedA = {
-    //        [a](double x) { return integrand1b1_(x, a); },
-    //        [a](double x) { return integrand1b2_(x, a); },
-    //        [a](double x) { return integrand1b3_(x, a); }
-    //    };
+        std::vector<double> intVectorForA;
 
-    //    std::vector<double> intVectorForA;
+        for (const auto& integrand : integrandFixedA) {
+            double intVal = gaussianQudrature_(0, a, n1b , integrand);
+            intVectorForA.push_back(intVal);
+        }
 
-    //    for (const auto& integrand : integrandFixedA) {
-    //        double intVal = gaussianQudrature_(0, a, 50, integrand);
-    //        intVectorForA.push_back(intVal);
-    //    }
+        allIntegrals.push_back(intVectorForA);
+    }
 
-    //    allIntegrals.push_back(intVectorForA);
-    //}
+    plotresult1b_(allIntegrals);
 
-    ////for (size_t i = 0; i < allIntegrals.size(); ++i) {
-    ////    std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
-    ////}
-    ////for (size_t i = 0; i < allIntegrals.size(); ++i) {
-    ////    std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
-    ////}
-    ////for (size_t i = 0; i < allIntegrals.size(); ++i) {
-    ////    std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
-    ////}
+    /*for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
+    }
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
+    }
+    for (size_t i = 0; i < allIntegrals.size(); ++i) {
+        std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
+    }*/
 
     ////exercise 1c 
 
@@ -189,9 +199,9 @@ int main() {
 
     //exercise 2a
 
-    std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
+    /*std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
     printVector(rootsbis);
     std::vector<double> rootsnet = polyRootNewtonRaphson_(function2a, -3, 3);
-    printVector(rootsnet);
+    printVector(rootsnet);*/
 
 }
