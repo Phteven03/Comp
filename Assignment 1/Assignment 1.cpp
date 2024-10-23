@@ -91,10 +91,10 @@ static double potential_(double k, double x, double d) {
     return std::tanh(k * x);
 }
 static double integrand1c1_(double x, double k) {
-    return 1 / std::sqrt(std::abs(std::tanh(k)) - std::abs(std::tanh(k * x)));
+    return 1 / std::sqrt(std::abs(std::tanh(8 * k)) - std::abs(std::tanh(8 * x)));
 }
 static double integrand1c2_(double x, double k) {
-    return 1 / std::sqrt(std::abs(std::tanh(0.5 * k)) - std::abs(std::tanh(k * x)));
+    return 1 / std::sqrt(std::abs(std::tanh(4 * k)) - std::abs(std::tanh(4 * x)));
 }
 
 
@@ -180,21 +180,26 @@ int main() {
     //exercise 1c 
     std::vector<double> potential1c1Vector;
     std::vector<double> potential1c05Vector;
+    std::vector<double> potentialfracVec;
     std::vector<double> kVector;
-    for (double k = 0; k <= 5; k += 1e-2) {
+    for (double k = 0; k <= PI/2; k += 1e-2) {
         kVector.push_back(k);
         auto integrandFixedK = [k](double x) { return integrand1c1_(x, k); };
-        double potential1c1 = gaussianQudrature_(0, 1, 50, integrandFixedK);
+        double potential1c1 = gaussianQudrature_(0, k, 50, integrandFixedK);
         potential1c1Vector.push_back(potential1c1);
 
         auto integrandFixedK05 = [k](double x) { return integrand1c2_(x, k); };
-        double potential1c05 = gaussianQudrature_(0, 0.5, 50, integrandFixedK05);
+        double potential1c05 = gaussianQudrature_(0, k/2, 50, integrandFixedK05);
         potential1c05Vector.push_back(potential1c05);
+
+        double potentialfrac = potential1c1 / potential1c05;
+        potentialfracVec.push_back(potentialfrac);
     }
 
     matplot::plot(kVector, potential1c1Vector);
     matplot::hold(matplot::on);
     matplot::plot(kVector, potential1c05Vector);
+    matplot::plot(kVector,potentialfracVec);
     matplot::hold(matplot::off);
     matplot::show();
 
@@ -229,7 +234,7 @@ int main() {
     plotresult2b_(errorIVec, errorIp1Vec);*/
 
     //exercise  3ab
-    /*vstd::vector<std::vector<double>> rootsVec;
+    /*std::vector<std::vector<double>> rootsVec;
     std::vector<double> rootsNumberVec;
     for (int i = 0; i < 1000; ++i) {
         std::vector<double> randpoly = generateRandomNumbers(7);
