@@ -13,3 +13,5 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals);
 void plotresult2a_(std::vector<double> rootsbisection, std::vector<double> rootsnewton);
 
 void plotresult2b_(std::vector<double> errorI, std::vector<double> errorIp1);
+
+void plotresult3a_(std::vector<double> allRoots);

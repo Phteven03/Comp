@@ -24,7 +24,7 @@ std::vector<double> polyDiff_(std::vector<double> polyFunction) {
 }
 
 std::vector<std::vector<double>> bracketing_(std::vector<double> poly, double leftlimit, double rightlimit) {
-    const double stepwidth = 1e-3;
+    const double stepwidth = 1e-4;
     std::vector<std::vector<double>> significantIntervalls;
     double previousValue = evaluatePoly_(poly, leftlimit);
     double previousX = leftlimit;
@@ -125,7 +125,7 @@ std::vector<std::vector<double>> newtonRaphson_(std::vector<double> polyFunction
 
 std::vector<double> newtonConvergence_(std::vector<double> poly, double leftLimit, double rightLimit) {
     std::vector<std::vector<double>> significantIntervals = bracketing_(poly, leftLimit, rightLimit);
-    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, { significantIntervals }, 10000);
+    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, { significantIntervals }, 100);
 
     return convergenceSteps[0];
 }

@@ -8,14 +8,19 @@
 void plotresult1a_(std::vector<double> trapIntVector, std::vector<double> simpIntVector, std::vector<double> gaussIntVector,  int n) {
 	const double REALINTVALUE = 1.311028777146120;
 	std::vector<double> nVector;
-	for (int j = 0; j < n; ++j) {
+	for (int j = 0; j <= n; ++j) {
 		nVector.push_back(j);
 	}
+
 	size_t sizeIntVector = trapIntVector.size();
 	for (size_t i = 0; i < sizeIntVector; ++i) {
 		trapIntVector[i] = abs(trapIntVector[i] - REALINTVALUE);
-		simpIntVector[i] = abs(simpIntVector[i] - REALINTVALUE);
 		gaussIntVector[i] = abs(gaussIntVector[i] - REALINTVALUE);
+	}
+	
+	size_t simpSizeIntVector = simpIntVector.size();
+	for (size_t i = 0; i < simpSizeIntVector; ++i) {
+		simpIntVector[i] = abs(simpIntVector[i] - REALINTVALUE);
 	}
 
 	matplot::semilogy(nVector, gaussIntVector);
@@ -26,6 +31,7 @@ void plotresult1a_(std::vector<double> trapIntVector, std::vector<double> simpIn
 	matplot::ylabel("Error");
 	matplot::legend({ "Gaussian Quadrature", "Trapazoid", "Simpson" });
 	matplot::grid(matplot::on);
+	matplot::title("Error of different integration methods");
 	matplot::show();
 }
 
@@ -46,6 +52,7 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals) {
 	matplot::ylabel("");
 	auto legend = matplot::legend({ "V(x) = cosh(x)", "V(x) = exp(|x|)", "V(x) = -cos(x)" }); 
 	legend->location(matplot::legend::general_alignment::topleft);
+	matplot::title("differenz V(x)");
 	matplot::show();
 }
 
@@ -71,5 +78,15 @@ void plotresult2b_(std::vector<double> errorI, std::vector<double> errorIp1) {
 	matplot::grid(matplot::on);
 	matplot::xlabel("error i+1");
 	matplot::ylabel("error i");
+	matplot::show();
+}
+
+void plotresult3a_(std::vector<double> allRoots) {
+
+	matplot::hist(allRoots, 500);
+	matplot::title("Distribution of roots");
+	matplot::xlabel("Location");
+	matplot::ylabel("Number of Roots");
+	matplot::grid(matplot::on);
 	matplot::show();
 }

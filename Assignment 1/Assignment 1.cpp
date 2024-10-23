@@ -6,13 +6,6 @@
 #include "vectormath.h"
 #include "matplot/matplot.h"
 
-#ifdef _DEBUG
-#define COMMENT_START /*
-#define COMMENT_END */
-#else 
-#define COMMENT_START
-#define COMMENT_END
-#endif
 
 //exercise 1
 #include "mathfunc1a.h"
@@ -58,7 +51,7 @@ static double simpsonRule_(double a, double b, int n, std::function<double(doubl
         evenSumValue += integrand(a + i * stepWidth);
     }
 
-    simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b - std::pow(b, (-10))));
+    simpIntegralValue = (stepWidth / 3) * (integrand(a) + 4 * oddSumValue + 2 * evenSumValue + integrand(b-SINGULARITY_ERROR_TERM));
     return simpIntegralValue;
 }
 static double gaussianQudrature_(double a, double b, double n, std::function<double(double)> integrand) {
@@ -98,10 +91,10 @@ static double potential_(double k, double x, double d) {
     return std::tanh(k * x);
 }
 static double integrand1c1_(double x, double k) {
-    return 1 / std::sqrt(std::tanh(1) - std::tanh(k * x));
+    return 1 / std::sqrt(std::abs(std::tanh(k)) - std::abs(std::tanh(k * x)));
 }
 static double integrand1c2_(double x, double k) {
-    return 1 / std::sqrt(std::tanh(1 / 2.0) - std::tanh(k * x));
+    return 1 / std::sqrt(std::abs(std::tanh(0.5 * k)) - std::abs(std::tanh(k * x)));
 }
 
 
@@ -110,7 +103,6 @@ double mu = 3e-6;
 std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 
 //exercise 3a
-
 
 
 int main() {
@@ -149,6 +141,7 @@ int main() {
         simpIntValue = simpsonRule_(a , b , i , integrand1a_);
         simpIntVector.push_back(simpIntValue);
     }
+
     plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n);*/
 
     //exercise 1b
@@ -184,11 +177,12 @@ int main() {
         std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
     }*/
 
-    ////exercise 1c 
+    //exercise 1c 
     std::vector<double> potential1c1Vector;
     std::vector<double> potential1c05Vector;
-    for (double k = 0; k <= 20; ++k) {
-
+    std::vector<double> kVector;
+    for (double k = 0; k <= 5; k += 1e-2) {
+        kVector.push_back(k);
         auto integrandFixedK = [k](double x) { return integrand1c1_(x, k); };
         double potential1c1 = gaussianQudrature_(0, 1, 50, integrandFixedK);
         potential1c1Vector.push_back(potential1c1);
@@ -197,8 +191,15 @@ int main() {
         double potential1c05 = gaussianQudrature_(0, 0.5, 50, integrandFixedK05);
         potential1c05Vector.push_back(potential1c05);
     }
-    printVector(potential1c1Vector);
-    printVector(potential1c05Vector);
+
+    matplot::plot(kVector, potential1c1Vector);
+    matplot::hold(matplot::on);
+    matplot::plot(kVector, potential1c05Vector);
+    matplot::hold(matplot::off);
+    matplot::show();
+
+    //printVector(potential1c1Vector);
+    //printVector(potential1c05Vector);
 
     //exercise 2a
     /*std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
@@ -225,20 +226,40 @@ int main() {
 
     double k = (errorIVec[1] - errorIVec.back()) / (errorIp1Vec[1] - errorIp1Vec.back());
     std::cout << k << std::endl;
-    plotresult2b_(errorIVec, errorIp1Vec); */
+    plotresult2b_(errorIVec, errorIp1Vec);*/
 
     //exercise  3ab
-    /*std::vector<double> rootsNumberVec;
+    /*vstd::vector<std::vector<double>> rootsVec;
+    std::vector<double> rootsNumberVec;
     for (int i = 0; i < 1000; ++i) {
         std::vector<double> randpoly = generateRandomNumbers(7);
         std::vector<double> roots = polyRootNewtonRaphson_(randpoly, -10, 10);
+        rootsVec.push_back(roots);
         size_t rootNumber = roots.size();
         rootsNumberVec.push_back(rootNumber);
     }
+
+    std::vector<double> allRoots;
+    for (const auto& roots : rootsVec) {
+        allRoots.insert(allRoots.end(), roots.begin(), roots.end());
+    }
+
+    //for (size_t i = 0; i < rootsVec.size(); ++i) {
+    //    std::cout << "Roots for polynomial " << i + 1 << ": ";
+    //    for (size_t j = 0; j < rootsVec[i].size(); ++j) {
+    //        std::cout << rootsVec[i][j] << " ";
+    //    }
+    //    std::cout << std::endl;
+    //}
+
     double sum = std::accumulate(rootsNumberVec.begin(), rootsNumberVec.end(), 0.0);
     double average = sum / rootsNumberVec.size();
     std::cout << average << std::endl;
-    //printVector(randpoly);*/
+
+    plotresult3a_(allRoots);*/
+
+
+
     
     
     
