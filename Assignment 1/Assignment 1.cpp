@@ -120,10 +120,14 @@ static double integrand1c2_(double x, double k) {
 
 // ---------    exercise 2a   -----------
 
-
-double mu = 3e-6;
+double R = 14959787000; //Distance earth sun
+double mu = 3e-6; // \frac{M_2}{M_1+M_2}
 // Coefficients for polynomial in exercise 2a
 std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 }; 
+
+
+
+
 
 int main() {
 
@@ -157,8 +161,8 @@ int main() {
 
 
     // ---------    exercise 1b   -----------
-
-    /*std::vector<std::vector<double>> allIntegrals;
+    /*
+    std::vector<std::vector<double>> allIntegrals;
     int n1b = 50;
 
     // Calculate integrals for 1b
@@ -218,22 +222,40 @@ int main() {
     matplot::show();
     */
 
-    // ---------    exercise 2a   -----------
 
-    /*std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
+    // ---------    exercise 2a   -----------
+    /*
+    //!!!!!!!!!!!!!!change stepwidth of bracketing!!!!!!!!!!!!!!!
+    
+    std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
     std::vector<double> convergenceBisection = bisectonConvergence_(function2a, -3, 3);
+    
 
     std::vector<double> rootsbis = polyRootBisection_(function2a, -3, 3);
+    std::vector<double> distanceL1Bi = scalarVectorProduct_(R, rootsbis);
+    std::cout << "Ratio: " << " ";
     printVector(rootsbis);
+    std::cout << "Bisection Distance L1 (in meters):" << " ";
+    printVector(distanceL1Bi);
+
+
     std::vector<double> rootsnet = polyRootNewtonRaphson_(function2a, -3, 3);
+    std::vector<double> distanceL1New = scalarVectorProduct_(R, rootsnet);
+    std::cout << "Ratio: " << " ";
     printVector(rootsnet);
+    std::cout << "Newton Distance L1 (in meters):" << " ";
+    printVector(distanceL1New);
+    
+
 
     plotresult2a_(convergenceBisection, convergenceNewton); // Plot convergence results for 2a
     */
 
+
     // ---------    exercise 2b   -----------
 
-    /*std::vector<double> errorIVec, errorIp1Vec;
+    /*
+    std::vector<double> errorIVec, errorIp1Vec;
 
     // Calculate errors for 2b
     for (size_t i = 0; i < convergenceNewton.size(); ++i) {
@@ -247,12 +269,14 @@ int main() {
     // Calculate and print convergence rate
     double k = (errorIVec[1] - errorIVec.back()) / (errorIp1Vec[1] - errorIp1Vec.back());
     std::cout << k << std::endl;
-    plotresult2b_(errorIVec, errorIp1Vec);
+    //plotresult2b_(errorIVec, errorIp1Vec);
     */
 
-    // ---------    exercise 3ab   -----------
 
-    /*std::vector<std::vector<double>> rootsVec;
+    // ---------    exercise 3ab   -----------
+    /*
+    //!!!!!!!!!!!!!!change stepwidth of bracketing!!!!!!!!!!!!!!!
+    std::vector<std::vector<double>> rootsVec;
     std::vector<double> rootsNumberVec;
 
     // Generate random polynomials and find their roots

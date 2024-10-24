@@ -30,7 +30,7 @@ void plotresult1a_(std::vector<double> trapIntVector, std::vector<double> simpIn
 	matplot::xlabel("N");
 	matplot::ylabel("Error");
 	matplot::legend({ "Gaussian Quadrature", "Trapazoid", "Simpson" });
-	matplot::grid(matplot::on);
+	matplot::grid(matplot::off);
 	matplot::title("Error of different integration methods");
 	matplot::show();
 }
@@ -47,27 +47,37 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals) {
 		matplot::plot(nVector, yVector);
 		matplot::hold(matplot::on);
 	}
-	matplot::hold(matplot::off);
-	matplot::xlabel("N");
-	matplot::ylabel("");
+
+	matplot::xlabel("a");
+	matplot::ylabel("T(a)");
 	auto legend = matplot::legend({ "V(x) = cosh(x)", "V(x) = exp(|x|)", "V(x) = -cos(x)" }); 
 	legend->location(matplot::legend::general_alignment::topleft);
 	matplot::title("differenz V(x)");
+	matplot::hold(matplot::off);
 	matplot::show();
 }
 
 void plotresult2a_(std::vector<double> convergenceBisection, std::vector<double> convergenceNewton) {
-	size_t size = convergenceBisection.size();
-	std::vector<double> nVector;
-	for (size_t j = 0; j < size; ++j) {
-		nVector.push_back(j);
+	size_t sizeBi = convergenceBisection.size();
+	std::vector<double> nVectorBi;
+	for (size_t i = 0; i < sizeBi; ++i) {
+		nVectorBi.push_back(i);
 	}
 
-	matplot::plot(nVector, convergenceBisection);
+	size_t sizeNe = convergenceNewton.size();
+	std::vector<double> nVectorNe;
+	for (size_t j = 0; j < sizeNe; ++j) {
+		nVectorNe.push_back(j);
+	}
+
+	matplot::plot(nVectorBi, convergenceBisection);
 	matplot::hold(matplot::on);
-	matplot::plot(nVector, convergenceNewton);
+	matplot::plot(nVectorNe, convergenceNewton);
 	matplot::hold(matplot::off);
 	matplot::legend({ "Bisection" , "Newton" });
+	matplot::ylabel("root Value");
+	matplot::xlabel("Iteration");
+	matplot::title("Convergence");
 	matplot::grid(matplot::on);
 	matplot::show();
 }

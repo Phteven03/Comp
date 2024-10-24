@@ -40,7 +40,7 @@ std::vector<double> bisectonConvergence_(std::vector<double> poly, double leftLi
 
 std::vector<double> newtonConvergence_(std::vector<double> poly, double leftLimit, double rightLimit) {
     std::vector<std::vector<double>> significantIntervals = bracketing_(poly, leftLimit, rightLimit);
-    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, significantIntervals, 100);
+    std::vector<std::vector<double>> convergenceSteps = newtonRaphson_(poly, significantIntervals, 50);
 
     return convergenceSteps[0];
 }
