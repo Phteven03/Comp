@@ -10,6 +10,8 @@ void plotresult1a_(std::vector<double> trapIntVector, std::vector<double> simpIn
 
 void plotresult1b_(std::vector<std::vector<double>> allIntegrals);
 
+void plotresult1c_(std::vector<double> kVector, std::vector<double> potential1c1Vector, std::vector<double> potential1c05Vector);
+
 void plotresult2a_(std::vector<double> rootsbisection, std::vector<double> rootsnewton);
 
 void plotresult2b_(std::vector<double> errorI, std::vector<double> errorIp1);

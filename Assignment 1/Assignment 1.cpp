@@ -109,11 +109,11 @@ static double potential_(double k, double x, double d) {
 
 // Two integrand functions for 1c, using different scalings of 'k'
 static double integrand1c1_(double x, double k) {
-    return 1 / std::sqrt(std::abs(std::tanh(8 * k)) - std::abs(std::tanh(8 * x)));
+    return 1 / std::sqrt(std::abs(std::tanh(k)) - std::abs(std::tanh(k * x)));
 }
 
 static double integrand1c2_(double x, double k) {
-    return 1 / std::sqrt(std::abs(std::tanh(4 * k)) - std::abs(std::tanh(4 * x)));
+    return 1 / std::sqrt(std::abs(std::tanh(0.5 * k)) - std::abs(std::tanh(k * x)));
 }
 
 
@@ -132,8 +132,9 @@ std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 int main() {
 
     // ---------    exercise 1a   -----------
-
-    /*const double a = 0;
+    /*
+        
+    const double a = 0;
     const double b = 1;
     const double n = 100;
 
@@ -161,6 +162,7 @@ int main() {
 
 
     // ---------    exercise 1b   -----------
+
     /*
     std::vector<std::vector<double>> allIntegrals;
     int n1b = 50;
@@ -186,45 +188,45 @@ int main() {
     plotresult1b_(allIntegrals); // Plot results for 1b
 
     // Print integral values for 1b
-    for (size_t i = 0; i < allIntegrals.size(); ++i) {
-        std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
-        std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
-        std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
-    }
+    //for (size_t i = 0; i < allIntegrals.size(); ++i) {
+    //    std::cout << "Result for a[" << i << "] with integrand1b1_: " << allIntegrals[i][0] << std::endl;
+    //    std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
+    //    std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
+    //}
     */
+    
 
 
     // ---------    exercise 1c   -----------
-
-    /*std::vector<double> potential1c1Vector, potential1c05Vector, potentialfracVec, kVector;
+    
+    /*
+    std::vector<double> potential1c1Vector;
+    std::vector<double> potential1c05Vector;
+    std::vector<double> potentialfracVec;
+    std::vector<double> kVector;
 
     // Calculate potentials for 1c
-    for (double k = 0; k <= PI / 2; k += 1e-2) {
+    for (double k = 0; k <= 3; k += 1e-2) {
         kVector.push_back(k);
         auto integrandFixedK = [k](double x) { return integrand1c1_(x, k); };
-        double potential1c1 = gaussianQudrature_(0, k, 50, integrandFixedK);
+        double potential1c1 = gaussianQudrature_(0, 1, 50, integrandFixedK);
         potential1c1Vector.push_back(potential1c1);
 
         auto integrandFixedK05 = [k](double x) { return integrand1c2_(x, k); };
-        double potential1c05 = gaussianQudrature_(0, k / 2, 50, integrandFixedK05);
+        double potential1c05 = gaussianQudrature_(0, 0.5, 50, integrandFixedK05);
         potential1c05Vector.push_back(potential1c05);
 
         double potentialfrac = potential1c1 / potential1c05; // Ratio of potentials
         potentialfracVec.push_back(potentialfrac);
     }
 
-    // Plot potential values
-    matplot::plot(kVector, potential1c1Vector);
-    matplot::hold(matplot::on);
-    matplot::plot(kVector, potential1c05Vector);
-    matplot::plot(kVector, potentialfracVec);
-    matplot::hold(matplot::off);
-    matplot::show();
+    plotresult1c_(kVector, potential1c1Vector, potential1c05Vector);
     */
 
 
     // ---------    exercise 2a   -----------
     /*
+    
     //!!!!!!!!!!!!!!change stepwidth of bracketing!!!!!!!!!!!!!!!
     
     std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
@@ -252,9 +254,10 @@ int main() {
     */
 
 
-    // ---------    exercise 2b   -----------
-
+    // ---------    exercise 2b   ----------- 
     /*
+    //remove the comments from task 2a
+    
     std::vector<double> errorIVec, errorIp1Vec;
 
     // Calculate errors for 2b
@@ -269,11 +272,11 @@ int main() {
     // Calculate and print convergence rate
     double k = (errorIVec[1] - errorIVec.back()) / (errorIp1Vec[1] - errorIp1Vec.back());
     std::cout << k << std::endl;
-    //plotresult2b_(errorIVec, errorIp1Vec);
+    plotresult2b_(errorIVec, errorIp1Vec);
     */
 
-
     // ---------    exercise 3ab   -----------
+    
     /*
     //!!!!!!!!!!!!!!change stepwidth of bracketing!!!!!!!!!!!!!!!
     std::vector<std::vector<double>> rootsVec;
@@ -300,6 +303,6 @@ int main() {
 
     plotresult3a_(allRoots); // Plot roots for exercise 3a
     */
-
+    
 
 }

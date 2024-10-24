@@ -47,6 +47,7 @@ std::vector<double> newtonConvergence_(std::vector<double> poly, double leftLimi
 
 std::vector<double> polyRootBisection_(std::vector<double> poly, double leftLimit, double rightLimit) {
     std::vector<double> roots;
+
     std::vector<std::vector<double>> significantIntervals = bracketing_(poly, leftLimit, rightLimit);
     std::vector<std::vector<double>> convergenceSteps = bisection_(poly, significantIntervals);
 

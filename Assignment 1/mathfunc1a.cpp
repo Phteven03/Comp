@@ -60,8 +60,8 @@ double legendrePnDiff_(double x, int n) {
 
 // Uses bracketing to find intervals where roots of P_n(x) may exist
 std::vector<double> legendreBracketing_(double leftlimit, double rightlimit, double n) {
-    const double stepwidth = 1e-5;
     std::vector<double> guesses;
+    const double stepwidth = 1e-5;
 
     double previousValue = legendrePn_(leftlimit, n);
     double previousX = leftlimit;
@@ -82,6 +82,7 @@ std::vector<double> legendreBracketing_(double leftlimit, double rightlimit, dou
 // Uses Newton-Raphson method to find roots of P_n(x)
 std::vector<double> legendreNewtonRaphson_(std::vector<double> guesses, double n) {
     std::vector<double> roots;
+
     double tolerance = 1e-6;
     int maxIterations = 100;
 

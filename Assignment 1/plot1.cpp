@@ -100,3 +100,16 @@ void plotresult3a_(std::vector<double> allRoots) {
 	matplot::grid(matplot::on);
 	matplot::show();
 }
+
+void plotresult1c_(std::vector<double> kVector, std::vector<double> potential1c1Vector, std::vector<double> potential1c05Vector) {
+
+	matplot::plot(kVector, potential1c1Vector);
+	matplot::hold(matplot::on);
+	matplot::plot(kVector, potential1c05Vector);
+	matplot::hold(matplot::off);
+	matplot::xlabel("k");
+	matplot::ylabel("IntegralValue");
+	matplot::legend({ "T(k)", "T(k/2)" });
+	matplot::title("V(x) = |tanh(kx)|");
+	matplot::show();
+}
