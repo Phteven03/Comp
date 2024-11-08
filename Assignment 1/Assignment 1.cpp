@@ -3,6 +3,8 @@
 #include <functional>
 #include <vector>
 #include <chrono>
+
+
 #include "vectormath.h"
 #include "matplot/matplot.h"
 
@@ -132,7 +134,7 @@ std::vector<double> function2a = { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 };
 int main() {
 
     // ---------    exercise 1a   -----------
-    /*
+    
         
     const double a = 0;
     const double b = 1;
@@ -158,7 +160,7 @@ int main() {
     }
 
     plotresult1a_(trapIntVector, simpIntVector, gaussIntVector, n); // Plot results for 1a
-    */
+    
 
 
     // ---------    exercise 1b   -----------
@@ -193,8 +195,8 @@ int main() {
     //    std::cout << "Result for a[" << i << "] with integrand1b2_: " << allIntegrals[i][1] << std::endl;
     //    std::cout << "Result for a[" << i << "] with integrand1b3_: " << allIntegrals[i][2] << std::endl;
     //}
-    */
     
+    */
 
 
     // ---------    exercise 1c   -----------
@@ -225,8 +227,8 @@ int main() {
 
 
     // ---------    exercise 2a   -----------
-    /*
     
+    /*
     //!!!!!!!!!!!!!!change stepwidth of bracketing!!!!!!!!!!!!!!!
     
     std::vector<double> convergenceNewton = newtonConvergence_(function2a, -3, 3);
@@ -250,7 +252,7 @@ int main() {
     
 
 
-    plotresult2a_(convergenceBisection, convergenceNewton); // Plot convergence results for 2a
+   // plotresult2a_(convergenceBisection, convergenceNewton); // Plot convergence results for 2a
     */
 
 

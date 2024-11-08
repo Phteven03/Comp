@@ -52,7 +52,7 @@ void plotresult1b_(std::vector<std::vector<double>> allIntegrals) {
 	matplot::ylabel("T(a)");
 	auto legend = matplot::legend({ "V(x) = cosh(x)", "V(x) = exp(|x|)", "V(x) = -cos(x)" }); 
 	legend->location(matplot::legend::general_alignment::topleft);
-	matplot::title("differenz V(x)");
+	matplot::title("different V(x)");
 	matplot::hold(matplot::off);
 	matplot::show();
 }
