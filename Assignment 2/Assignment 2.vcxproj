@@ -145,10 +145,12 @@
     <ClCompile Include="Assignment2.cpp" />
     <ClCompile Include="fileUtils.cpp" />
     <ClCompile Include="mathfunc2.cpp" />
+    <ClCompile Include="plots.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fileUtils.h" />
     <ClInclude Include="mathfunc2.h" />
+    <ClInclude Include="plots.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

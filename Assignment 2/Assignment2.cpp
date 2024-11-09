@@ -7,19 +7,24 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <numeric>
 
 #include "mathfunc2.h"
 #include "fileUtils.h"
 #include "matplot/matplot.h"
 #include "fftw3.h"
+#include "plots.h"
 
 
 
-static std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values) {
-    Timer time;
-    std::vector<std::complex<double>> fourierTransformed;
+std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values, StepTimer* stepTimer) {
+    if (stepTimer) {
+        stepTimer->startTimer();
+    }
     int n = values.size();
     double D = 2.0 * M_PI / n;
+    std::vector<std::complex<double>> fourierTransformed;
+    fourierTransformed.reserve(n);
 
     for (int k = 0; k < n; ++k) {
         std::complex<double> sum(0, 0);
@@ -31,41 +36,72 @@ static std::vector<std::complex<double>> discreteFourierTransform_(std::vector<d
         }
         fourierTransformed.push_back(sum / static_cast<double>(n));
     }
+    if (stepTimer) {
+        stepTimer->stopStoreTimer();
+    }
+
     return fourierTransformed;
 }
 
 int main() {
 
+
+    //-------- exercise 1 --------------
     std::vector<std::vector<double>> data = readTxt2Matrix_("single_tone.txt");
-    
-    size_t n = data.size();
-    std::vector<double> xVector;
-    std::vector<double> yVector;
-    for (size_t i = 0; i < n; ++i) {
-        xVector.push_back(i);
-    }
-
-    std::vector<std::complex<double>> fftResultlib = FFT_(data[0]);
-    std::vector<std::complex<double>> fftResultdisc = discreteFourierTransform_(data[0]);
-
-    //printVector(fftResultdisc);
-    //printVector(fftResultlib);
-    
+    std::vector<double> dataLeft = data[0];
+    std::vector<double> dataRight = data[1];
+    size_t dataSize = dataLeft.size();
+    int sampleRate = 44100;
     /*
-    std::vector<double> fftlibVec;
-    std::vector<double> fftdiscVec;
+    //--------exercise 1a ----------------
 
-    for (int i = 0; i < n / 2; ++i) {
-        double amplitudefftlib = std::abs(fftResultlib[i]) / (n / 2.0);
-        fftlibVec.push_back(amplitudefftlib);
-        double amplitudefftdisc = std::abs(fftResultdisc[i]) / (n / 2.0);
-        fftdiscVec.push_back(amplitudefftdisc);
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
+    size_t sizefft = fftResult.size();
+
+    std::vector<double> sum(sizefft);
+
+    for (size_t i = 0; i < sizefft; ++i) {
+        sum[i] = std::abs(std::abs(fftResult[i]) / (sizefft / 2.0) - std::abs(dftResult[i]) / (sizefft / 2.0));
+        if (std::abs(sum[i]) < 1e-7) {
+            sum[i] = 0;
+        }
+    }
+    double totalSum = std::accumulate(sum.begin(), sum.end(), 0.0);
+
+    std::cout << "Difference between FFT and DFT: " << totalSum << std::endl;
+
+    //------------- exercise 1b --------------
+
+    StepTimer stepTimerfft;
+    StepTimer stepTimerdft;
+    std::vector<std::complex<double>> fftResultTimed;
+    std::vector<std::complex<double>> dftResultTimed;
+    std::vector<double> m;
+    for (size_t m = 1; m < std::floor(sizefft/1000); ++m) {
+        std::vector<double> dataSubset(dataLeft.begin(), dataLeft.begin() + m);
+        fftResultTimed = FFT_(dataSubset, &stepTimerfft);
+        dftResultTimed = discreteFourierTransform_(dataSubset, &stepTimerdft);
+    }
+    std::vector<float> fftTimes = stepTimerfft.getTimes();
+    std::vector<float> dftTimes = stepTimerdft.getTimes();
+
+    plotResult1b(fftTimes, dftTimes);
+    */
+
+    //-------- exercise 1c --------------
+
+    std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
+    std::vector<double> frequencies;
+    std::vector<double> powers;
+    for (const auto& pair : powerSpectrumData) {
+        frequencies.push_back(pair.first);
+        powers.push_back(pair.second);
     }
 
-    matplot::plot(xVector, fftlibVec);
-    matplot::hold(matplot::on);
-    matplot::plot(xVector, fftdiscVec);
-    matplot::hold(matplot::off);
+    matplot::plot(frequencies, powers);
     matplot::show();
-    */
+
 }

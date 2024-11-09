@@ -18,6 +18,18 @@ struct Timer {
     ~Timer();
 };
 
+class StepTimer {
+public:
+    void startTimer();
+    void stopStoreTimer();
+    std::vector<float> getTimes();
+private:
+    std::chrono::high_resolution_clock::time_point start;
+    std::chrono::high_resolution_clock::time_point end;
+    std::chrono::duration<float> duration;
+    std::vector<float> times;
+};
+
 template <typename T>
 void printVector(std::vector<T>& vector) {
     std::cout << '[';
@@ -26,4 +38,9 @@ void printVector(std::vector<T>& vector) {
     std::cout << ']' << std::endl;
 }
 
-std::vector<std::complex<double>> FFT_(const std::vector<double>& values);
+std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values, StepTimer* stepTimer = nullptr);
+
+std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>& values, double frequency, StepTimer* stepTimer = nullptr);
+
+std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTimer* stepTimer = nullptr);
+ 

@@ -24,12 +24,18 @@
     <ClCompile Include="fileUtils.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="plots.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mathfunc2.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="fileUtils.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="plots.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
