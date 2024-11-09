@@ -35,6 +35,7 @@ void StepTimer::stopStoreTimer() {
     
     times.push_back(ms);
 }
+
 std::vector<float> StepTimer::getTimes() {
     return times;
 }
@@ -53,7 +54,7 @@ std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTi
     double* in = (double*)fftw_malloc(sizeof(double) * N);
     std::copy(values.begin(), values.end(), in);
 
-    fftw_plan plan = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
+    fftw_plan plan = fftw_plan_dft_r2c_1d((int)N, in, out, FFTW_ESTIMATE);
     fftw_execute(plan);
 
     for (size_t i = 0; i < N / 2.0 + 1; ++i) {

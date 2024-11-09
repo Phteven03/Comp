@@ -21,12 +21,12 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
     if (stepTimer) {
         stepTimer->startTimer();
     }
-    int n = values.size();
+    size_t n = values.size();
     double D = 2.0 * M_PI / n;
     std::vector<std::complex<double>> fourierTransformed;
     fourierTransformed.reserve(n);
 
-    for (int k = 0; k < n; ++k) {
+    for (size_t k = 0; k < n; ++k) {
         std::complex<double> sum(0, 0);
         for (int j = 0; j < n; ++j) {
             double realPart = std::cos(k * j * D);
