@@ -58,7 +58,7 @@ std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTi
     fftw_execute(plan);
 
     for (size_t i = 0; i < N / 2.0 + 1; ++i) {
-        FFTResult[i] = std::complex<double>(out[i][0], out[i][1]) / static_cast<double>(N);
+        FFTResult[i] = std::complex<double>(out[i][0], out[i][1]);
     }
 
     fftw_destroy_plan(plan);
@@ -90,11 +90,11 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
         if (i > 0 && i < N / 2) {
             power *= 2.0;
         }
-        double powerDensity = power / (N * N);
+        double powerSpectrumValue = power * power / (N * N);
 
         double currentFreq = i * freqResolution;
 
-        powerSpectrumVec.emplace_back(currentFreq, powerDensity);
+        powerSpectrumVec.emplace_back(currentFreq, powerSpectrumValue);
     }
 
     if (stepTimer) {

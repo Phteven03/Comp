@@ -13,6 +13,18 @@ void plotResult1b(std::vector<float> fftTimes, std::vector<float> dftTimes) {
     matplot::ylabel("t / ms");
     matplot::legend({ "FFT-Time", "DFT-Time" });
     matplot::title("Computation Time FFT vs. DFT");
+    matplot::grid(matplot::on);
     matplot::show();
 
+}
+
+void plotResult1c(std::vector<double> frequencies, std::vector<double> powers) {
+    matplot::plot(frequencies, powers);
+    matplot::xlabel("f / Hz");
+    matplot::ylabel("P / Watt / Hz");
+    matplot::legend({ "Powerspectrum" , "0"});
+    matplot::title("Power spectral density");
+    matplot::grid(matplot::on);
+    matplot::xlim({ 0, 500 });
+    matplot::show();
 }

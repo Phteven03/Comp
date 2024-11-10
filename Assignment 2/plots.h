@@ -5,3 +5,4 @@
 #include "matplot/matplot.h"
 
 void plotResult1b(std::vector<float> fftTimes, std::vector<float> dftTimes);
+void plotResult1c(std::vector<double> frequencies, std::vector<double> powers);

@@ -8,13 +8,13 @@
 #include <string>
 #include <chrono>
 #include <numeric>
+#include <algorithm>
 
 #include "mathfunc2.h"
 #include "fileUtils.h"
 #include "matplot/matplot.h"
 #include "fftw3.h"
 #include "plots.h"
-
 
 
 std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values, StepTimer* stepTimer) {
@@ -34,7 +34,7 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
             std::complex<double> w(realPart, -imagPart);
             sum += w * values[j];
         }
-        fourierTransformed.push_back(sum / static_cast<double>(n));
+        fourierTransformed.push_back(sum);
     }
     if (stepTimer) {
         stepTimer->stopStoreTimer();
@@ -47,14 +47,18 @@ int main() {
 
 
     //-------- exercise 1 --------------
+    /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("single_tone.txt");
     std::vector<double> dataLeft = data[0];
     std::vector<double> dataRight = data[1];
     size_t dataSize = dataLeft.size();
+    //dataLeft.resize(dataSize + dataSize, 0.0);
+    //dataRight.resize(dataSize + dataSize, 0.0);
     int sampleRate = 44100;
-    /*
+    */
+ 
     //--------exercise 1a ----------------
-
+    /*
     
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
 
@@ -74,7 +78,7 @@ int main() {
     std::cout << "Difference between FFT and DFT: " << totalSum << std::endl;
 
     //------------- exercise 1b --------------
-
+    
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;
@@ -91,8 +95,8 @@ int main() {
     plotResult1b(fftTimes, dftTimes);
     */
 
-    //-------- exercise 1c --------------
-
+    //-------- exercise 1cd --------------
+    /*
     std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
     std::vector<double> frequencies;
     std::vector<double> powers;
@@ -101,7 +105,19 @@ int main() {
         powers.push_back(pair.second);
     }
 
-    matplot::plot(frequencies, powers);
-    matplot::show();
+    plotResult1c(frequencies, powers);
+    
+    //---------- exercise 1d --------------
+
+    size_t index = 0;
+    auto maxpower = std::max_element(powers.begin(), powers.end());
+    if (maxpower != powers.end()) {
+        index = std::distance(powers.begin(), maxpower);
+    }
+    double fundFrequency = frequencies[index];
+    std::cout << "Fundamental Frequenz: " << fundFrequency << std::endl;
+    std::cout << "Those the note is a D_3" << std::endl;
+    */
+   
 
 }
