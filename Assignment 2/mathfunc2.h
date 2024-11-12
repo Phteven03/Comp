@@ -30,6 +30,26 @@ private:
     std::vector<float> times;
 };
 
+class TridiagonalMatrix {
+public:
+    std::vector<double> mid;
+    std::vector<double> upper;
+    std::vector<double> rightvector;
+};
+
+class LUDecomposition {
+public:
+    std::vector<double> LLower;
+    std::vector<double> UMid;
+    std::vector<double> UUpper;
+};
+
+class splineValues {
+public:
+    std::vector<double> xValues;
+    std::vector<double> splineValues;
+};
+
 template <typename T>
 void printVector(std::vector<T>& vector) {
     std::cout << '[';
@@ -44,3 +64,12 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
 
 std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTimer* stepTimer = nullptr);
  
+TridiagonalMatrix createTridiagonalMatrix_(std::vector<double>& x, std::vector<double>& y);
+
+LUDecomposition LUD_(TridiagonalMatrix& matrix);
+
+std::vector<double> solveLU_(LUDecomposition& LU, std::vector<double>& u);
+
+double evaluateSplineSegment_(double x, double x_i, double x_ip1, double y_i, double y_ip1, double z_i, double z_ip1, double h);
+
+splineValues calculateSplines_(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, double stepWidth);

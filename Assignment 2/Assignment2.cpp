@@ -31,7 +31,8 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
         for (int j = 0; j < n; ++j) {
             double realPart = std::cos(k * j * D);
             double imagPart = std::sin(k * j * D);
-            std::complex<double> w(realPart, -imagPart);
+            std::complex<double> w(realPart, -imagPart)
+                ;
             sum += w * values[j];
         }
         fourierTransformed.push_back(sum);
@@ -116,8 +117,27 @@ int main() {
     }
     double fundFrequency = frequencies[index];
     std::cout << "Fundamental Frequenz: " << fundFrequency << std::endl;
-    std::cout << "Those the note is a D_3" << std::endl;
+    std::cout << "The note is a D_3" << std::endl;
     */
    
+    //------ exercise 2a ---------------
+
+    std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
+    std::vector<double> y;
+    for (double xi : x) {
+        y.push_back(1 / (1 + xi));
+    }
+
+    TridiagonalMatrix matrix = createTridiagonalMatrix_(x, y);
+
+    LUDecomposition LU = LUD_(matrix);
+
+    std::vector<double> z = solveLU_(LU, matrix.rightvector);
+
+    double stepWidth = 1e-2;
+
+    splineValues splines =  calculateSplines_(x, y, z, stepWidth);
+
+    matplot::plot(splines.xValues, splines.splineValues);
 
 }

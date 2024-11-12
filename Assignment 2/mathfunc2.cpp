@@ -40,7 +40,6 @@ std::vector<float> StepTimer::getTimes() {
     return times;
 }
 
-
 std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTimer* stepTimer) {
 
     if (stepTimer) {
@@ -102,4 +101,94 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
     }
 
     return powerSpectrumVec;
+}
+
+TridiagonalMatrix createTridiagonalMatrix_(std::vector<double>& x, std::vector<double>& y) {
+    size_t n = x.size();
+
+    TridiagonalMatrix matrix;
+    matrix.mid.resize(n - 1);
+    matrix.upper.resize(n - 1);
+    matrix.rightvector.resize(n - 1);
+
+    std::vector<double> h(n);
+    std::vector<double> v(n-1);
+    std::vector<double> b(n);
+    std::vector<double> u(n-1);
+
+    for (size_t i = 0; i < n; ++i) {
+        h[i] = x[i + 1] - x[i];
+        b[i] = (y[i + 1] - y[i]) / h[i];
+    }
+    
+    for (size_t i = 1; i < n; ++i) {
+        matrix.mid[i - 1] = 2 * (h[i - 1] + h[i]);
+        matrix.rightvector[i - 1] = 6 * (b[i] - b[i - 1]);
+        matrix.upper[i - 1] = h[i - 1];
+    }
+
+    return matrix;
+}
+
+LUDecomposition LUD_(TridiagonalMatrix& matrix) {
+    size_t n = matrix.mid.size();
+    LUDecomposition LU;
+
+    LU.UMid.resize(n);
+    LU.UUpper.resize(n - 1);
+    LU.LLower.resize(n - 1);
+
+    LU.UMid[0] = matrix.mid[0];
+
+    for (size_t i = 0; i < n - 1; ++i) {
+        LU.UUpper[i] = matrix.upper[i];
+    }
+
+    for (size_t k = 1; k < n; ++k) {
+        LU.LLower[k - 1] = matrix.upper[k - 1] / LU.UMid[k - 1];
+        LU.UMid[k] = matrix.mid[k - 1] - LU.LLower[k - 1] * LU.UUpper[k - 1];
+    }
+    return LU;
+}
+
+std::vector<double> solveLU_(LUDecomposition& LU, std::vector<double>& u) {
+    size_t n = u.size();
+    std::vector<double> y(n);
+    std::vector<double> z(n);
+
+    y[0] = u[0] / LU.UMid[0];
+    for (size_t i = 1; i < n; ++i) {
+        y[i] = (u[i] - LU.LLower[i - 1] * y[i - 1]) / LU.UMid[i];
+    }
+
+    z[n - 1] = y[n - 1];
+    for (int i = n - 2; i >= 0; --i) {
+        z[i] = y[i] - LU.UUpper[i] * z[i + 1] / LU.UMid[i];
+    }
+    return z;
+}
+
+double evaluateSplineSegment_(double x, double x_i, double x_ip1, double y_i, double y_ip1, double z_i, double z_ip1, double h) {
+    double term1 = (z_i / (6 * h)) * pow(x_ip1 - x, 3);
+    double term2 = (z_ip1 / (6 * h)) * pow(x - x_i, 3);
+    double term3 = ((y_ip1 / h) - (z_ip1 * h / 6)) * (x - x_i);
+    double term4 = ((y_i / h) - (z_i * h / 6)) * (x_ip1 - x);
+    return term1 + term2 + term3 + term4;
+}
+
+splineValues calculateSplines_(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, double stepWidth) {
+    splineValues Sxi;
+
+    size_t n = x.size() - 1;
+
+    for (size_t i = 0; i < n; ++i) {
+        double h = x[i + 1] - x[i];
+
+        for (double xi = x[i]; xi <= x[i + 1]; xi += stepWidth) {
+            double splineValue = evaluateSplineSegment_(xi, x[i], x[i + 1], y[i], y[i + 1], z[i], z[i + 1], h);
+            Sxi.splineValues.push_back(splineValue);
+            Sxi.xValues.push_back(xi);
+        }
+    }
+    return Sxi;
 }
