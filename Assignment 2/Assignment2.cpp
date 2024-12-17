@@ -125,19 +125,20 @@ int main() {
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
     std::vector<double> y;
     for (double xi : x) {
-        y.push_back(1 / (1 + xi));
+        y.push_back(1 / (1 + xi * xi));
     }
 
     TridiagonalMatrix matrix = createTridiagonalMatrix_(x, y);
+    printVector(matrix.upper);
+    printVector(matrix.mid);
+    printVector(matrix.rightvector);
 
-    LUDecomposition LU = LUD_(matrix);
+    //LUDecomposition LU = LUD_(matrix);
 
-    std::vector<double> z = solveLU_(LU, matrix.rightvector);
+   /* std::vector<double> z = solveLU_(LU, matrix.rightvector);
 
     double stepWidth = 1e-2;
 
     splineValues splines =  calculateSplines_(x, y, z, stepWidth);
-
-    matplot::plot(splines.xValues, splines.splineValues);
-
+    */
 }

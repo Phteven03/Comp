@@ -8,12 +8,12 @@ void plotResult1b(std::vector<float> fftTimes, std::vector<float> dftTimes) {
     matplot::plot(fftTimes);
     matplot::hold(matplot::on);
     matplot::plot(dftTimes);
-    matplot::hold(matplot::off);
     matplot::xlabel("m");
     matplot::ylabel("t / ms");
     matplot::legend({ "FFT-Time", "DFT-Time" });
     matplot::title("Computation Time FFT vs. DFT");
     matplot::grid(matplot::on);
+    matplot::hold(matplot::off);
     matplot::show();
 
 }
@@ -27,4 +27,5 @@ void plotResult1c(std::vector<double> frequencies, std::vector<double> powers) {
     matplot::grid(matplot::on);
     matplot::xlim({ 0, 500 });
     matplot::show();
+
 }

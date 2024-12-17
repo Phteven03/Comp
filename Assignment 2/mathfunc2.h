@@ -51,7 +51,7 @@ public:
 };
 
 template <typename T>
-void printVector(std::vector<T>& vector) {
+void printVector(const std::vector<T>& vector) {
     std::cout << '[';
     for (size_t i = 0; i < vector.size(); ++i)
         std::cout << vector[i] << ' ';
