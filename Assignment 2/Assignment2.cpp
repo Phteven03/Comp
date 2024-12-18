@@ -15,6 +15,7 @@
 #include "matplot/matplot.h"
 #include "fftw3.h"
 #include "plots.h"
+#include "TridiagonalMatrix.h"
 
 
 std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values, StepTimer* stepTimer) {
@@ -128,20 +129,17 @@ int main() {
         y.push_back(1 / (1 + xi * xi));
     }
 
-    TridiagonalMatrix matrix = createTridiagonalMatrix_(x, y);
+    TridiagonalMatrix matrix(x.size());
+    matrix.setValues(x, y);
+    TridiagonalMatrix LU = matrix.LUD_();
 
-    LUDecomposition LU = LUD_(matrix);
-
-    std::vector<double> z = solveLU_(LU, matrix.rightvector);
-    z.insert(z.begin(), 0.0);
-    z.push_back(0.0);
+    std::vector<double> z = LU.solveLU_();
 
     double stepWidth = 1e-2;
 
     splineValues splineValues = calculateSplines_(x, y, z, stepWidth);
 
-    //plotResult2b(splineValues);
-
+    plotResult2b(splineValues);
 
     
 }

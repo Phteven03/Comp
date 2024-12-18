@@ -146,11 +146,13 @@
     <ClCompile Include="fileUtils.cpp" />
     <ClCompile Include="mathfunc2.cpp" />
     <ClCompile Include="plots.cpp" />
+    <ClCompile Include="TridiagonalMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fileUtils.h" />
     <ClInclude Include="mathfunc2.h" />
     <ClInclude Include="plots.h" />
+    <ClInclude Include="TridiagonalMatrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

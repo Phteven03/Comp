@@ -103,73 +103,6 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
     return powerSpectrumVec;
 }
 
-TridiagonalMatrix createTridiagonalMatrix_(std::vector<double>& x, std::vector<double>& y) {
-    size_t n = x.size();
-
-    TridiagonalMatrix matrix;
-    matrix.mid.resize(n-2);
-    matrix.upper.resize(n - 3);
-    matrix.rightvector.resize(n-2);
-
-    std::vector<double> b(n - 1);
-    std::vector<double> h(n - 1);
-
-    for (size_t i = 0; i < n - 1 ; ++i) {
-        h[i] = x[i + 1] - x[i];
-        b[i] = (y[i + 1] - y[i]) / h[i];
-
-        if (i < n - 3) {
-            matrix.upper[i] = h[i];
-        }
-    }
-
-    for (size_t i = 0; i < n-2; ++i) {
-        matrix.mid[i] = 2 * (h[i] + h[i+1]);
-        matrix.rightvector[i] = 6 * (b[i+1] - b[i]);
-    }
-
-    return matrix;
-}
-
-LUDecomposition LUD_(TridiagonalMatrix& matrix) {
-    size_t n = matrix.mid.size();
-    
-    LUDecomposition LU;
-    LU.UMid.resize(n);
-    LU.UUpper.resize(n - 1);
-    LU.LLower.resize(n - 1);
-
-    LU.UMid[0] = matrix.mid[0];
-
-    for (size_t i = 0; i < n - 1; ++i) {
-        LU.UUpper[i] = matrix.upper[i];
-    }
-
-    for (size_t i = 1; i < n; ++i) {
-        LU.LLower[i - 1] = matrix.upper[i - 1] / LU.UMid[i - 1];
-        LU.UMid[i] = matrix.mid[i] - matrix.upper[i - 1] * LU.LLower[i - 1];
-    }
-    return LU;
-}
-
-std::vector<double> solveLU_(LUDecomposition& LU, std::vector<double>& u) {
-    size_t n = u.size();
-    std::vector<double> y(n);
-    std::vector<double> z(n);
-
-    y[0] = u[0];
-    for(size_t i = 1; i < n; ++i) {
-        y[i] = u[i] - LU.LLower[i-1] * y[i - 1];
-    }
-
-    z[n - 1] = y[n-1] / LU.UMid[n-1];
-    for (int i = n - 2; i >= 0; --i) {
-        z[i] = (y[i] - LU.UUpper[i] * z[i + 1]) / LU.UMid[i];
-    }
-
-    return z;
-}
-
 splineValues calculateSplines_(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, double stepWidth) {
     splineValues Sxi;
 
@@ -185,14 +118,4 @@ splineValues calculateSplines_(const std::vector<double>& x, const std::vector<d
         }
     }
     return Sxi;
-}
-
-std::vector<double> matrixInversion_()
-
-SOR calculateWithSOR_(TridiagonalMatrix& matrix, double& omega, double tolerance) {
-    size_t n = matrix.rightvector.size();
-    std::vector<double> guessSol(n, 0.0);
-    std::vector<double> previousSol(n, 0.0);
-
-
 }
