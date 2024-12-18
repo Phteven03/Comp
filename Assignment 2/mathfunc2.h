@@ -30,25 +30,31 @@ private:
     std::vector<float> times;
 };
 
-class TridiagonalMatrix {
-public:
+
+struct TridiagonalMatrix {
     std::vector<double> mid;
     std::vector<double> upper;
     std::vector<double> rightvector;
 };
 
-class LUDecomposition {
-public:
+struct LUDecomposition {
     std::vector<double> LLower;
     std::vector<double> UMid;
     std::vector<double> UUpper;
 };
 
-class splineValues {
-public:
+struct splineValues {
     std::vector<double> xValues;
     std::vector<double> splineValues;
 };
+
+struct SOR {
+    std::vector<double> iterations;
+    std::vector<double> solution;
+
+};
+
+
 
 template <typename T>
 void printVector(const std::vector<T>& vector) {
@@ -70,6 +76,6 @@ LUDecomposition LUD_(TridiagonalMatrix& matrix);
 
 std::vector<double> solveLU_(LUDecomposition& LU, std::vector<double>& u);
 
-double evaluateSplineSegment_(double x, double x_i, double x_ip1, double y_i, double y_ip1, double z_i, double z_ip1, double h);
-
 splineValues calculateSplines_(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, double stepWidth);
+
+SOR calculateWithSOR_(TridiagonalMatrix& matrix, double& omega, double tolerance);

@@ -120,7 +120,7 @@ int main() {
     std::cout << "The note is a D_3" << std::endl;
     */
    
-    //------ exercise 2a ---------------
+    //------ exercise 2abc ---------------
 
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
     std::vector<double> y;
@@ -129,16 +129,19 @@ int main() {
     }
 
     TridiagonalMatrix matrix = createTridiagonalMatrix_(x, y);
-    printVector(matrix.upper);
-    printVector(matrix.mid);
-    printVector(matrix.rightvector);
 
-    //LUDecomposition LU = LUD_(matrix);
+    LUDecomposition LU = LUD_(matrix);
 
-   /* std::vector<double> z = solveLU_(LU, matrix.rightvector);
+    std::vector<double> z = solveLU_(LU, matrix.rightvector);
+    z.insert(z.begin(), 0.0);
+    z.push_back(0.0);
 
     double stepWidth = 1e-2;
 
-    splineValues splines =  calculateSplines_(x, y, z, stepWidth);
-    */
+    splineValues splineValues = calculateSplines_(x, y, z, stepWidth);
+
+    //plotResult2b(splineValues);
+
+
+    
 }
