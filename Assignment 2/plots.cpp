@@ -35,6 +35,20 @@ void plotResult2b(splineValues splineValues) {
     matplot::plot(splineValues.xValues, splineValues.splineValues);
     matplot::xlabel("x");
     matplot::ylabel("y");
+    matplot::title("Spline Fit");
+    matplot::grid(matplot::on);
+    matplot::show();
+}
+
+void plotResult2c(std::vector<double>& omega, std::vector<size_t>& iterations) {
+
+    std::vector<int> intIterations;
+    for (size_t i = 0; i < iterations.size(); ++i) {
+        intIterations.push_back(static_cast<int>(iterations[i]));
+    }
+    matplot::plot(omega, intIterations);
+    matplot::xlabel("Omega");
+    matplot::ylabel("Iterations");
     matplot::grid(matplot::on);
     matplot::show();
 }

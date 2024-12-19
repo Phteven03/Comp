@@ -32,8 +32,7 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
         for (int j = 0; j < n; ++j) {
             double realPart = std::cos(k * j * D);
             double imagPart = std::sin(k * j * D);
-            std::complex<double> w(realPart, -imagPart)
-                ;
+            std::complex<double> w(realPart, -imagPart);
             sum += w * values[j];
         }
         fourierTransformed.push_back(sum);
@@ -48,7 +47,7 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
 int main() {
 
 
-    //-------- exercise 1 --------------
+    //-------- exercise 1 ----------------
     /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("single_tone.txt");
     std::vector<double> dataLeft = data[0];
@@ -59,7 +58,7 @@ int main() {
     int sampleRate = 44100;
     */
  
-    //--------exercise 1a ----------------
+    //-------- exercise 1a ---------------
     /*
     
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
@@ -121,25 +120,47 @@ int main() {
     std::cout << "The note is a D_3" << std::endl;
     */
    
-    //------ exercise 2abc ---------------
-
+    //-------- exercise 2abc -------------
+    /*
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
     std::vector<double> y;
+    double tolerance = 1e-12;
     for (double xi : x) {
         y.push_back(1 / (1 + xi * xi));
     }
 
     TridiagonalMatrix matrix(x.size());
-    matrix.setValues(x, y);
-    TridiagonalMatrix LU = matrix.LUD_();
+    matrix.setValues_(x, y);
 
-    std::vector<double> z = LU.solveLU_();
-
+    std::vector<double> z = matrix.solveLU_(matrix.rightVector);
     double stepWidth = 1e-2;
 
     splineValues splineValues = calculateSplines_(x, y, z, stepWidth);
 
-    plotResult2b(splineValues);
+    std::vector<size_t> iteration;
+    std::vector<double> omega;
+    std::pair<size_t, std::vector<double>> itSol;
+    for (double i = 0; i < 2; i += 1e-2) {
+        omega.push_back(i);
+        itSol = matrix.solveSOR_(matrix.rightVector, i, tolerance);
+        iteration.push_back(itSol.first);
+    }
+    size_t minIteraton = *std::min_element(iteration.begin()+1, iteration.end());
+    auto it = std::find(iteration.begin(), iteration.end(), minIteraton);
+    int indexMin = std::distance(iteration.begin(), it);
+    std::cout << indexMin << std::endl;
+    double omegaofMin = omega[indexMin];
 
+    std::cout << "Minimum of Iteration: " << minIteraton << " --> corresponding omega = " << omegaofMin << std::endl;
+    plotResult2c(omega, iteration);
+    plotResult2b(splineValues);
+    */
     
+    //-------- exercise 3 ----------------
+    
+
+
+
+
+
 }
