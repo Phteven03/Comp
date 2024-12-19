@@ -157,7 +157,15 @@ int main() {
     */
     
     //-------- exercise 3 ----------------
-    
+    std::vector<std::vector<double>> data = readTxt2Matrix_("dna coordinates.txt");
+    std::cout << data.size() << std::endl;
+    std::vector<double> x = data[0];
+    printVector(x);
+    //std::vector<double> z = data[2];
+    //printVector(z);
+    //std::vector<double> m = data[3];
+    //printVector(m);
+
 
 
 
