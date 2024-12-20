@@ -9,6 +9,9 @@
 #include <chrono>
 #include <numeric>
 #include <algorithm>
+#include <regex>
+#include <sstream>
+#include <vectormath.h>
 
 #include "mathfunc2.h"
 #include "fileUtils.h"
@@ -16,6 +19,7 @@
 #include "fftw3.h"
 #include "plots.h"
 #include "TridiagonalMatrix.h"
+
 
 
 std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>& values, StepTimer* stepTimer) {
@@ -158,16 +162,55 @@ int main() {
     
     //-------- exercise 3 ----------------
     std::vector<std::vector<double>> data = readTxt2Matrix_("dna coordinates.txt");
-    std::cout << data.size() << std::endl;
     std::vector<double> x = data[0];
-    printVector(x);
-    //std::vector<double> z = data[2];
-    //printVector(z);
-    //std::vector<double> m = data[3];
-    //printVector(m);
+    std::vector<double> y = data[1];
+    std::vector<double> z = data[2];
+    std::vector<double> m = data[3];
+    size_t length = x.size();
+
+    const int rCut = 5;
+    const int k = 1;
+
+    std::vector<std::vector<double>> hessianMatrix(length, std::vector<double>(length, 0.0));;
+
+    for (size_t i = 0; i < length; ++i) {
+        size_t neighbors = 0;
+
+        for (size_t j = i + 1; j < length; ++j) {
+            double dx = x[i] - x[j];
+            double dy = y[i] - y[j];
+            double dz = z[i] - z[j];
+            double rSquared = dx * dx + dy * dy + dz * dz;
+
+            if (rSquared < (rCut * rCut)) {
+                ++neighbors;
+                hessianMatrix[i][j] = -k;
+                hessianMatrix[j][i] = -k;
+            }
+        }
+        hessianMatrix[i][i] = neighbors * k;
+    }
+
+    std::vector<std::vector<double>> invSqrtmassMatrix(length, std::vector<double>(length, 0.0));
+    for (size_t i = 0; i < length; ++i) {
+        invSqrtmassMatrix[i][i] = 1/std::sqrt(m[i]);
+    }
+
+    std::vector<std::vector<double>> stiffnessMatrix = matrixMultiplication_(matrixMultiplication_(invSqrtmassMatrix, hessianMatrix) , invSqrtmassMatrix);
+    size_t n = stiffnessMatrix[0].size();
+    size_t maxIterations = 1000;
+    std::vector<double> lambda(n);
+    std::vector<std::vector<double>> eigenVectorMatrix(n);
+    for (size_t i = 0; i < 10; ++i) {
+        eigenVectorMatrix[i] = powerMethod_(stiffnessMatrix, maxIterations);
+        lambda[i] = eigenValues_(stiffnessMatrix, eigenVectorMatrix[i]);
+        stiffnessMatrix = matrixMatrixSubtraction_(stiffnessMatrix, scalarMatrixMultiplication_(lambda[i] , vectorVector2MatrixMultiplication_(eigenVectorMatrix[i],eigenVectorMatrix[i])));
+    }
+
+    plotResult3c(z, eigenVectorMatrix, lambda);
 
 
-
+     
 
 
 

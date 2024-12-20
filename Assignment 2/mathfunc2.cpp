@@ -5,10 +5,12 @@
 #include <complex>
 #include <iomanip>
 #include <chrono>
+#include <vectormath.h>
 
 #include "mathfunc2.h"
 #include "matplot/matplot.h"
 #include "fftw3.h"
+
 
 Timer::Timer(){
     start = std::chrono::high_resolution_clock::now();
@@ -118,4 +120,30 @@ splineValues calculateSplines_(const std::vector<double>& x, const std::vector<d
         }
     }
     return Sxi;
+}
+
+std::vector<double> powerMethod_(std::vector<std::vector<double>>& matrix, size_t& maxIterations) {
+    size_t n = matrix[0].size();
+    std::vector<double> guessVector(n, 1.0);
+
+    for (size_t iterations = 1; iterations < maxIterations; ++iterations) {
+        std::vector<double>nextVector = matrixVectorMuliplicaton_(matrix, guessVector);
+
+        double norm = 0.0;
+        double sum = 0.0;
+        for (double val : nextVector) {
+            sum += val * val;
+        }
+        norm = sqrt(sum);
+        for (size_t i = 0; i < n; ++i) {
+            nextVector[i] /= norm;
+        }
+        guessVector = nextVector;
+    }
+    return guessVector;
+}
+
+double eigenValues_(std::vector<std::vector<double>>& matrix, std::vector<double>& eigenVector) {
+    double lambda = scalarProduct_(eigenVector, matrixVectorMuliplicaton_(matrix, eigenVector)) / scalarProduct_(eigenVector,eigenVector);
+    return lambda;
 }

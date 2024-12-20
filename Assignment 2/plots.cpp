@@ -4,6 +4,7 @@
 #include "matplot/matplot.h"
 #include "plots.h"
 #include "mathfunc2.h"
+#include <string>
 
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
     matplot::plot(fftTimes);
@@ -51,4 +52,43 @@ void plotResult2c(std::vector<double>& omega, std::vector<size_t>& iterations) {
     matplot::ylabel("Iterations");
     matplot::grid(matplot::on);
     matplot::show();
+}
+
+void plotResult3c(std::vector<double>& z, std::vector<std::vector<double>>& eigenVectorMatrix, std::vector<double>& eigenValues) {
+    size_t n = z.size();
+
+    std::vector<double> zFirstStrand(z.begin(), z.begin() + n / 2);
+    std::vector<double> zSecondStrand(z.begin() + n / 2, z.end());
+
+    std::vector<double> firstStrandEigenValues(eigenValues.begin(), eigenValues.begin() + n / 2);
+    std::vector<double> secondStrandEigenValues(eigenValues.begin() + n / 2, eigenValues.end());
+
+    std::vector<std::vector<double>> firstStrandMatrix;
+    std::vector<std::vector<double>> secondStrandMatrix;
+
+    for (const auto& row : eigenVectorMatrix) {
+        size_t mid = row.size() / 2;
+
+        std::vector<double> firstHalf(row.begin(), row.begin() + mid);
+        std::vector<double> secondHalf(row.begin() + mid, row.end());
+
+        firstStrandMatrix.push_back(firstHalf);
+        secondStrandMatrix.push_back(secondHalf);
+        std::cout << firstStrandMatrix.size() << std::endl;
+    }
+
+
+    for (size_t i = 0; i < 10; ++i) {
+        matplot::subplot(3, 4, i);
+        matplot::plot(zFirstStrand, firstStrandMatrix[i]);
+        matplot::hold(matplot::on);
+        matplot::plot(zSecondStrand, secondStrandMatrix[i]);
+        matplot::xlabel("z");
+        matplot::ylabel("eigenvectors");
+        matplot::legend({ "strand 1", "strand 2" });
+        matplot::grid(matplot::on);
+        matplot::hold(matplot::off);
+    }
+    matplot::show();
+
 }

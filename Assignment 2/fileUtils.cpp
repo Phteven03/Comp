@@ -1,8 +1,9 @@
-#include <iostream>
+#include <vector>
+#include <string>
 #include <fstream>
 #include <sstream>
-#include <string>
-#include <vector>
+#include <iostream>
+#include <regex>
 
 std::vector<std::vector<double>> readTxt2Matrix_(const std::string& fileName) {
     std::vector<std::vector<double>> columns;
@@ -16,13 +17,21 @@ std::vector<std::vector<double>> readTxt2Matrix_(const std::string& fileName) {
     std::string line;
     bool firstLine = true;
 
+    std::regex delimiterRegex("[,\\s]+");
+
     while (std::getline(file, line)) {
         std::vector<double> row;
-        std::istringstream stream(line);
-        double value;
 
-        while (stream >> value) {
-            row.push_back(value);
+        std::sregex_token_iterator begin(line.begin(), line.end(), delimiterRegex, -1);
+        std::sregex_token_iterator end;
+
+        for (auto it = begin; it != end; ++it) {
+            try {
+                row.push_back(std::stod(it->str()));
+            }
+            catch (const std::invalid_argument&) {
+                std::cerr << "Warning: Non-numeric value skipped in line: " << line << std::endl;
+            }
         }
 
         if (firstLine) {

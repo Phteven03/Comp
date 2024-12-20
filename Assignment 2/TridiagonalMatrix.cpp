@@ -79,7 +79,7 @@ std::pair<size_t, std::vector<double>> TridiagonalMatrix::solveSOR_(std::vector<
     if (n != N) {
         throw std::invalid_argument("rightVector wrong size!");
     }
-    std::vector<double> guessSolution(n+1, 0.0);
+    std::vector<double> guessSolution(n + 1, 0.0);
     std::vector<double> previousSolution(n, 0.0);
     double diff = 0;
     double maxPrevious = 1;

@@ -35,7 +35,7 @@ std::vector<T> operator-(std::vector<T> vector1, std::vector<T> vector2) {
 }
 
 template <typename T>
-std::vector<T> scalarProduct_(std::vector<T> vector1, std::vector<T> vector2) {
+T scalarProduct_(std::vector<T> vector1, std::vector<T> vector2) {
 	
 	size_t vectorSize = vector1.size();
 	for (size_t i = 0; i < vectorSize; ++i) {
@@ -102,4 +102,16 @@ template <typename T, typename S>
 std::vector<T> operator+(S scalar, std::vector<T> vector) {
 
 	return scalarVectorAddition_(scalar, vector);
+}
+
+template <typename T>
+std::vector<std::vector<T>> vectorVector2MatrixMultiplication_(std::vector<T> vector1, std::vector<T> vector2) {
+	size_t n = vector1.size();
+	std::vector<std::vector<T>> matrixProduct(n, std::vector<T>(n));
+	for (size_t i = 0; i < n; ++i) {
+		for (size_t j = 0; j < n; ++j) {
+			matrixProduct[i][j] = vector1[i] * vector2[j];
+		}
+	}
+	return matrixProduct;
 }

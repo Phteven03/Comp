@@ -1,8 +1,9 @@
-#pragma once
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <regex>
 
 #include "mathfunc2.h"
 #include "matplot/matplot.h"

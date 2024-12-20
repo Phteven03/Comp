@@ -149,7 +149,10 @@
     <ClInclude Include="mathfunc2a.h" />
     <ClInclude Include="matplotlibcpp.h" />
     <ClInclude Include="plot1.h" />
-    <ClInclude Include="vectormath.h" />
+    <ClInclude Include="vectormath.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
