@@ -41,6 +41,11 @@ struct SOR {
 
 };
 
+template<typename T>
+void print(const T scalar) {
+    std::cout << scalar << std::endl;
+}
+
 template <typename T>
 void printVector(const std::vector<T>& vector) {
     std::cout << '[';
@@ -84,7 +89,7 @@ std::vector<std::vector<T>> matrixMultiplication_(std::vector<std::vector<T>> ma
 template <typename T> 
 std::vector<T> matrixVectorMuliplicaton_(std::vector<std::vector<T>> matrix, std::vector<T> vector) {
     size_t n = vector.size();
-    std::vector<T> matrixVectorProduct(n);
+    std::vector<T> matrixVectorProduct(n,0);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < n; ++j) {
             matrixVectorProduct[i] += matrix[i][j] * vector[j];

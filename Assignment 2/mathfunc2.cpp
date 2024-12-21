@@ -126,15 +126,15 @@ std::vector<double> powerMethod_(std::vector<std::vector<double>>& matrix, size_
     size_t n = matrix[0].size();
     std::vector<double> guessVector(n, 1.0);
 
-    for (size_t iterations = 1; iterations < maxIterations; ++iterations) {
+    for (size_t iterations = 0; iterations < maxIterations; ++iterations) {
         std::vector<double>nextVector = matrixVectorMuliplicaton_(matrix, guessVector);
-
         double norm = 0.0;
         double sum = 0.0;
         for (double val : nextVector) {
             sum += val * val;
         }
-        norm = sqrt(sum);
+        norm = std::sqrt(sum);
+
         for (size_t i = 0; i < n; ++i) {
             nextVector[i] /= norm;
         }

@@ -6,6 +6,9 @@
 #include "mathfunc2.h"
 #include <string>
 
+#include <set>
+#include <thread>
+
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
     matplot::plot(fftTimes);
     matplot::hold(matplot::on);
@@ -68,27 +71,29 @@ void plotResult3c(std::vector<double>& z, std::vector<std::vector<double>>& eige
 
     for (const auto& row : eigenVectorMatrix) {
         size_t mid = row.size() / 2;
-
         std::vector<double> firstHalf(row.begin(), row.begin() + mid);
-        std::vector<double> secondHalf(row.begin() + mid, row.end());
+        std::vector<double> secondHalf(row.begin() + mid,  row.end());
 
         firstStrandMatrix.push_back(firstHalf);
         secondStrandMatrix.push_back(secondHalf);
-        std::cout << firstStrandMatrix.size() << std::endl;
     }
 
 
+
     for (size_t i = 0; i < 10; ++i) {
-        matplot::subplot(3, 4, i);
+        matplot::figure(i);
         matplot::plot(zFirstStrand, firstStrandMatrix[i]);
         matplot::hold(matplot::on);
         matplot::plot(zSecondStrand, secondStrandMatrix[i]);
+        matplot::hold(matplot::off);
         matplot::xlabel("z");
         matplot::ylabel("eigenvectors");
         matplot::legend({ "strand 1", "strand 2" });
         matplot::grid(matplot::on);
-        matplot::hold(matplot::off);
+        matplot::show();
+
     }
-    matplot::show();
+
+
 
 }

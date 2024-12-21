@@ -35,13 +35,12 @@ std::vector<T> operator-(std::vector<T> vector1, std::vector<T> vector2) {
 }
 
 template <typename T>
-T scalarProduct_(std::vector<T> vector1, std::vector<T> vector2) {
-	
+T scalarProduct_(const std::vector<T>& vector1, const std::vector<T>& vector2) {
 	size_t vectorSize = vector1.size();
+	T sum = 0;
 	for (size_t i = 0; i < vectorSize; ++i) {
-		vector1[i] *= vector2[i];
+		sum += vector1[i] * vector2[i];
 	}
-	T sum = accumulate(vector1.begin(), vector1.end(), 0);
 	return sum;
 }
 
