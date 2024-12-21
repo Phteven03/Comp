@@ -1,13 +1,12 @@
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
+#include <string>
+
 #include "matplot/matplot.h"
 #include "plots.h"
 #include "mathfunc2.h"
-#include <string>
 
-#include <set>
-#include <thread>
 
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
     matplot::plot(fftTimes);

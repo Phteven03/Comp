@@ -10,6 +10,7 @@
 #include "mathfunc2.h"
 #include "matplot/matplot.h"
 #include "fftw3.h"
+#include "matrixMath.h"
 
 
 Timer::Timer(){

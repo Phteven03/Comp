@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="fileUtils.h" />
     <ClInclude Include="mathfunc2.h" />
+    <ClInclude Include="matrixMath.h" />
     <ClInclude Include="plots.h" />
     <ClInclude Include="TridiagonalMatrix.h" />
   </ItemGroup>

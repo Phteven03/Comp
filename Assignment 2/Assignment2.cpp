@@ -13,8 +13,6 @@
 #include <sstream>
 #include <vectormath.h>
 
-#include <set>
-#include <thread>
 
 #include "mathfunc2.h"
 #include "fileUtils.h"
@@ -22,6 +20,7 @@
 #include "fftw3.h"
 #include "plots.h"
 #include "TridiagonalMatrix.h"
+#include "matrixMath.h"
 
 
 
@@ -218,7 +217,7 @@ int main() {
     plotResult3c(z, eigenVectorMatrix, lambda);
     */
 
-     
+    //-------- exercise 4 ----------------
 
 
 
