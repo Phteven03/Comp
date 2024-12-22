@@ -59,19 +59,17 @@ int main() {
     std::vector<double> dataLeft = data[0];
     std::vector<double> dataRight = data[1];
     size_t dataSize = dataLeft.size();
-    dataLeft.resize(dataSize + dataSize, 0.0);
-    dataRight.resize(dataSize + dataSize, 0.0);
-    dataSize = dataLeft.size();
+    //dataLeft.resize(dataSize + dataSize, 0.0);
+    //dataRight.resize(dataSize + dataSize, 0.0);
+    //dataSize = dataLeft.size();
     int sampleRate = 44100;
   
  
     //-------- exercise 1a ---------------
-
-
-    
+    /*
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
     std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
+
 
     double sumreal = 0;
     double sumimag = 0;
@@ -85,31 +83,32 @@ int main() {
            sumimag += diffimag;
        }
     }
-
-
-    std::cout << "Difference between FFT and DFT: " << sumreal << " + i" << sumimag << std::endl;
-
-    
+    std::cout << "Difference between FFT and DFT: " << sumreal << " + i " << sumimag << std::endl;
+    */
     //------------- exercise 1b --------------
-    /*
+    
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;
     std::vector<std::complex<double>> dftResultTimed;
-    std::vector<double> m;
-    for (size_t m = 1; m < std::floor(sizefft/1000); ++m) {
-        std::vector<double> dataSubset(dataLeft.begin(), dataLeft.begin() + m);
-        fftResultTimed = FFT_(dataSubset, &stepTimerfft);
-        dftResultTimed = discreteFourierTransform_(dataSubset, &stepTimerdft);
+
+    for (size_t i = 5e2; i > 0; --i)
+    {
+        dataLeft.resize(i);
+        dftResultTimed.resize(i);
+        fftResultTimed.resize(i);
+        dftResultTimed = discreteFourierTransform_(dataLeft, &stepTimerdft);
+        fftResultTimed = FFT_(dataLeft, &stepTimerfft);
+
     }
     std::vector<float> fftTimes = stepTimerfft.getTimes();
     std::vector<float> dftTimes = stepTimerdft.getTimes();
 
     plotResult1b(fftTimes, dftTimes);
-
+    
 
     //-------- exercise 1cd --------------
- 
+    
     std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
     std::vector<double> frequencies;
     std::vector<double> powers;
@@ -118,20 +117,16 @@ int main() {
         powers.push_back(pair.second);
     }
 
-    plotResult1c(frequencies, powers);
+    //plotResult1c(frequencies, powers);
     
-    //---------- exercise 1d --------------
 
+    //---------- exercise 1d --------------
     size_t index = 0;
     auto maxpower = std::max_element(powers.begin(), powers.end());
-    if (maxpower != powers.end()) {
         index = std::distance(powers.begin(), maxpower);
-    }
     double fundFrequency = frequencies[index];
     std::cout << "Fundamental Frequenz: " << fundFrequency << std::endl;
     std::cout << "The note is a D_3" << std::endl;
-
-   */
     //-------- exercise 2abc -------------
     /*
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
@@ -157,9 +152,8 @@ int main() {
         itSol = matrix.solveSOR_(matrix.rightVector, i, tolerance);
         iteration.push_back(itSol.first);
     }
-    size_t minIteraton = *std::min_element(iteration.begin()+1, iteration.end());
-    auto it = std::find(iteration.begin(), iteration.end(), minIteraton);
-    int indexMin = std::distance(iteration.begin(), it);
+    auto minIteraton = std::min_element(iteration.begin()+1, iteration.end());
+    size_t indexMin = std::distance(iteration.begin(), minIteraton);
     std::cout << indexMin << std::endl;
     double omegaofMin = omega[indexMin];
 

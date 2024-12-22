@@ -52,20 +52,26 @@ std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTi
     size_t N = values.size();
     std::vector<std::complex<double>> FFTResult(N);
 
-    fftw_complex* out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (N / 2.0 + 1));
-    double* in = (double*)fftw_malloc(sizeof(double) * N);
-    std::copy(values.begin(), values.end(), in);
+    fftw_complex* in = fftw_alloc_complex(N);
+    fftw_complex* out = fftw_alloc_complex(N);
 
-    fftw_plan plan = fftw_plan_dft_r2c_1d((int)N, in, out, FFTW_ESTIMATE);
+    for (int i = 0; i < N; ++i)
+    {
+        in[i][0] = values[i];
+        in[i][1] = 0.0;
+    }
+
+    fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
     fftw_execute(plan);
 
-    for (size_t i = 0; i < N / 2.0 + 1; ++i) {
+    for (size_t i = 0; i < N; ++i) {
         FFTResult[i] = std::complex<double>(out[i][0], out[i][1]);
     }
 
     fftw_destroy_plan(plan);
     fftw_free(in);
     fftw_free(out);
+    fftw_cleanup();
 
     if (stepTimer) {
         stepTimer->stopStoreTimer();
@@ -89,14 +95,14 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
     for (size_t i = 0; i < N / 2 + 1; ++i) {
 
         double power = std::norm(FFTResult[i]);
-        if (i > 0 && i < N / 2) {
-            power *= 2.0;
-        }
-        double powerSpectrumValue = power * power / (N * N);
+        //if (i > 0 && i < N / 2) {
+        //    power *= 2.0;
+        //}
+        //double powerSpectrumValue = power * power / (N * N);
 
         double currentFreq = i * freqResolution;
 
-        powerSpectrumVec.emplace_back(currentFreq, powerSpectrumValue);
+        powerSpectrumVec.emplace_back(currentFreq, power);
     }
 
     if (stepTimer) {
