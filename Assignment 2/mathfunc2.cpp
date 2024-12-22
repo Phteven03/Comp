@@ -74,7 +74,7 @@ std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTi
     return FFTResult;
 }
 
-std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>& values, double frequency, StepTimer* stepTimer) {
+std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>& values, double sampleRate, StepTimer* stepTimer) {
     std::vector<std::pair<double, double>> powerSpectrumVec;
     size_t N = values.size();
 
@@ -84,7 +84,7 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
 
     std::vector<std::complex<double>> FFTResult = FFT_(values, stepTimer);
 
-    double freqResolution = frequency / N;
+    double freqResolution = sampleRate / N;
 
     for (size_t i = 0; i < N / 2 + 1; ++i) {
 

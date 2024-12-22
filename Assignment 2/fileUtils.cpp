@@ -5,6 +5,9 @@
 #include <iostream>
 #include <regex>
 
+#include"fileUtils.h"
+#include"mathfunc2.h"
+
 std::vector<std::vector<double>> readTxt2Matrix_(const std::string& fileName) {
     std::vector<std::vector<double>> columns;
     std::ifstream file(fileName);
@@ -30,7 +33,8 @@ std::vector<std::vector<double>> readTxt2Matrix_(const std::string& fileName) {
                 row.push_back(std::stod(it->str()));
             }
             catch (const std::invalid_argument&) {
-                std::cerr << "Warning: Non-numeric value skipped in line: " << line << std::endl;
+                //std::cerr << "Warning: Non-numeric value skipped in line: " << line << std::endl;
+                continue;
             }
         }
 

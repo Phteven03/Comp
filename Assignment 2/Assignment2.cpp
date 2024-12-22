@@ -54,38 +54,44 @@ int main() {
 
 
     //-------- exercise 1 ----------------
-    /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("single_tone.txt");
+
     std::vector<double> dataLeft = data[0];
     std::vector<double> dataRight = data[1];
     size_t dataSize = dataLeft.size();
-    //dataLeft.resize(dataSize + dataSize, 0.0);
-    //dataRight.resize(dataSize + dataSize, 0.0);
+    dataLeft.resize(dataSize + dataSize, 0.0);
+    dataRight.resize(dataSize + dataSize, 0.0);
+    dataSize = dataLeft.size();
     int sampleRate = 44100;
-    */
+  
  
     //-------- exercise 1a ---------------
-    /*
+
+
     
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
 
     std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
-    size_t sizefft = fftResult.size();
 
-    std::vector<double> sum(sizefft);
-
-    for (size_t i = 0; i < sizefft; ++i) {
-        sum[i] = std::abs(std::abs(fftResult[i]) / (sizefft / 2.0) - std::abs(dftResult[i]) / (sizefft / 2.0));
-        if (std::abs(sum[i]) < 1e-7) {
-            sum[i] = 0;
-        }
+    double sumreal = 0;
+    double sumimag = 0;
+    for (size_t i = 0; i < dataSize; i++) {
+       double diffreal = fftResult[i].real() - dftResult[i].real();
+       double diffimag = fftResult[i].imag() - dftResult[i].imag();
+       if (std::abs(diffreal) > 1e-12) {
+           sumreal += diffreal;
+       }
+       if (std::abs(diffimag) > 1e-12) {
+           sumimag += diffimag;
+       }
     }
-    double totalSum = std::accumulate(sum.begin(), sum.end(), 0.0);
 
-    std::cout << "Difference between FFT and DFT: " << totalSum << std::endl;
 
-    //------------- exercise 1b --------------
+    std::cout << "Difference between FFT and DFT: " << sumreal << " + i" << sumimag << std::endl;
+
     
+    //------------- exercise 1b --------------
+    /*
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;
@@ -100,10 +106,10 @@ int main() {
     std::vector<float> dftTimes = stepTimerdft.getTimes();
 
     plotResult1b(fftTimes, dftTimes);
-    */
+
 
     //-------- exercise 1cd --------------
-    /*
+ 
     std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
     std::vector<double> frequencies;
     std::vector<double> powers;
@@ -124,8 +130,8 @@ int main() {
     double fundFrequency = frequencies[index];
     std::cout << "Fundamental Frequenz: " << fundFrequency << std::endl;
     std::cout << "The note is a D_3" << std::endl;
-    */
-   
+
+   */
     //-------- exercise 2abc -------------
     /*
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
@@ -165,6 +171,7 @@ int main() {
     //-------- exercise 3 ----------------
     /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("xyzm_dna.txt");
+
     std::vector<double> x = data[0];
     std::vector<double> y = data[1];
     std::vector<double> z = data[2];
