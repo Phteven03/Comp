@@ -69,6 +69,33 @@ int main() {
     //-------- exercise 1a ---------------
     /*
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft, -1);
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
+    
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
+
     std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
 
 
@@ -87,7 +114,7 @@ int main() {
     std::cout << "Difference between FFT and DFT: " << sumreal << " + i " << sumimag << std::endl;
     */
     //------------- exercise 1b --------------
-    /*
+    
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;

@@ -12,6 +12,7 @@
 
 
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
+    std:reverse
     matplot::plot(fftTimes);
     matplot::hold(matplot::on);
     matplot::plot(dftTimes);
