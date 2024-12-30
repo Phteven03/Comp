@@ -12,7 +12,6 @@
 
 
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
-    std:reverse
     matplot::plot(fftTimes);
     matplot::hold(matplot::on);
     matplot::plot(dftTimes);
@@ -27,7 +26,7 @@ void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
 }
 
 void plotResult1c(std::vector<double>& frequencies, std::vector<double>& powers) {
-    matplot::plot(frequencies, powers, ".");
+    matplot::plot(frequencies, powers);
     matplot::xlabel("f / Hz");
     matplot::ylabel("P / Watt / Hz");
     matplot::legend({ "Powerspectrum" , "0" });

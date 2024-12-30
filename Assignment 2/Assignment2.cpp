@@ -55,6 +55,7 @@ int main() {
 
 
     //-------- exercise 1 ----------------
+    /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("single_tone.txt");
 
     std::vector<double> dataLeft = data[0];
@@ -64,38 +65,12 @@ int main() {
     //dataRight.resize(dataSize + dataSize, 0.0);
     //dataSize = dataLeft.size();
     int sampleRate = 44100;
-
+    */
 
     //-------- exercise 1a ---------------
     /*
     std::vector<std::complex<double>> fftResult = FFT_(dataLeft, -1);
     
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
     std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
 
 
@@ -113,8 +88,9 @@ int main() {
     }
     std::cout << "Difference between FFT and DFT: " << sumreal << " + i " << sumimag << std::endl;
     */
+
     //------------- exercise 1b --------------
-    
+    /*
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;
@@ -128,11 +104,12 @@ int main() {
     }
     std::vector<float> fftTimes = stepTimerfft.getTimes();
     std::vector<float> dftTimes = stepTimerdft.getTimes();
+
     plotResult1b(fftTimes, dftTimes);
     */
 
-    //-------- exercise 1cd --------------
-
+    //-------- exercise 1cde --------------
+    /*
     std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
     std::vector<double> frequencies;
     std::vector<double> powers;
@@ -141,8 +118,8 @@ int main() {
         powers.push_back(pair.second);
     }
 
-    //plotResult1c(frequencies, powers);
-
+    plotResult1c(frequencies, powers);
+    
     //--------- exercise 1de ----------------
     std::vector<double> maxima = maxFinder_(powers);
     std::vector<double> powersSorted = bubbleSort_(maxima);
@@ -172,14 +149,9 @@ int main() {
         realInvFFT[i] = std::real(invfftidealValues[i]);
     }
 
-    matplot::plot(realInvFFT);
-    matplot::show();
-
-
-
-
-
-
+    //matplot::plot(realInvFFT);
+    //matplot::show();
+    */
 
     //--------- exercise 2abc --------------
     /*
@@ -211,7 +183,7 @@ int main() {
     std::cout << indexMin << std::endl;
     double omegaofMin = omega[indexMin];
 
-    std::cout << "Minimum of Iteration: " << minIteraton << " --> corresponding omega = " << omegaofMin << std::endl;
+    std::cout << "Minimum of Iteration: " << indexMin << " --> corresponding omega = " << omegaofMin << std::endl;
     plotResult2c(omega, iteration);
     plotResult2b(splineValues);
     */
