@@ -5,9 +5,10 @@
 #include "matplot/matplot.h"
 #include "mathfunc2.h"
 #include <string>
+#include <algorithm>
+#include <iterator>
+#include <vector>
 
-#include <set>
-#include <thread>
 
 void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes);
 void plotResult1c(std::vector<double>& frequencies, std::vector<double>& powers);

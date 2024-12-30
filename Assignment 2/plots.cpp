@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <algorithm>
+#include <iterator>
+#include <vector> 
 
 #include "matplot/matplot.h"
 #include "plots.h"
@@ -23,10 +26,10 @@ void plotResult1b(std::vector<float>& fftTimes, std::vector<float>& dftTimes) {
 }
 
 void plotResult1c(std::vector<double>& frequencies, std::vector<double>& powers) {
-    matplot::plot(frequencies, powers);
+    matplot::plot(frequencies, powers, ".");
     matplot::xlabel("f / Hz");
     matplot::ylabel("P / Watt / Hz");
-    matplot::legend({ "Powerspectrum" , "0"});
+    matplot::legend({ "Powerspectrum" , "0" });
     matplot::title("Power spectral density");
     matplot::grid(matplot::on);
     matplot::xlim({ 0, 500 });
@@ -71,7 +74,7 @@ void plotResult3c(std::vector<double>& z, std::vector<std::vector<double>>& eige
     for (const auto& row : eigenVectorMatrix) {
         size_t mid = row.size() / 2;
         std::vector<double> firstHalf(row.begin(), row.begin() + mid);
-        std::vector<double> secondHalf(row.begin() + mid,  row.end());
+        std::vector<double> secondHalf(row.begin() + mid, row.end());
 
         firstStrandMatrix.push_back(firstHalf);
         secondStrandMatrix.push_back(secondHalf);

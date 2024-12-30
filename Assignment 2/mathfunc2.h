@@ -25,8 +25,8 @@ public:
     void stopStoreTimer();
     std::vector<float> getTimes();
 private:
-    std::chrono::high_resolution_clock::time_point start;
-    std::chrono::high_resolution_clock::time_point end;
+    std::chrono::time_point<std::chrono::steady_clock> start;
+    std::chrono::time_point<std::chrono::steady_clock> end;
     std::chrono::duration<float> duration;
     std::vector<float> times;
 };
@@ -57,7 +57,7 @@ void printVector(const std::vector<T>& vector) {
 
 template <typename T>
 void printMatrix(const std::vector<std::vector<T>>& matrix) {
-    for(const auto row : matrix) {
+    for (const auto row : matrix) {
         for (T value : row) {
             std::cout << value << " ";
         }
@@ -69,7 +69,11 @@ std::vector<std::complex<double>> discreteFourierTransform_(std::vector<double>&
 
 std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>& values, double frequency, StepTimer* stepTimer = nullptr);
 
-std::vector<std::complex<double>> FFT_(const std::vector<double>& values, StepTimer* stepTimer = nullptr);
+std::vector<std::complex<double>> FFT_(const std::vector<double>& values, int signExp, StepTimer* stepTimer = nullptr);
+
+std::vector<double> bubbleSort_(std::vector<double> vector);
+
+std::vector<double> maxFinder_(std::vector<double> vector);
 
 splineValues calculateSplines_(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, double stepWidth);
 

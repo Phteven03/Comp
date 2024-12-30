@@ -12,7 +12,8 @@
 #include <regex>
 #include <sstream>
 #include <vectormath.h>
-
+#include <iterator>
+#include <thread>
 
 #include "mathfunc2.h"
 #include "fileUtils.h"
@@ -59,19 +60,17 @@ int main() {
     std::vector<double> dataLeft = data[0];
     std::vector<double> dataRight = data[1];
     size_t dataSize = dataLeft.size();
-    dataLeft.resize(dataSize + dataSize, 0.0);
-    dataRight.resize(dataSize + dataSize, 0.0);
-    dataSize = dataLeft.size();
+    //dataLeft.resize(dataSize + dataSize, 0.0);
+    //dataRight.resize(dataSize + dataSize, 0.0);
+    //dataSize = dataLeft.size();
     int sampleRate = 44100;
-  
- 
+
+
     //-------- exercise 1a ---------------
-
-
-    
-    std::vector<std::complex<double>> fftResult = FFT_(dataLeft);
-
+    /*
+    std::vector<std::complex<double>> fftResult = FFT_(dataLeft, -1);
     std::vector<std::complex<double>> dftResult = discreteFourierTransform_(dataLeft);
+
 
     double sumreal = 0;
     double sumimag = 0;
@@ -85,31 +84,28 @@ int main() {
            sumimag += diffimag;
        }
     }
-
-
-    std::cout << "Difference between FFT and DFT: " << sumreal << " + i" << sumimag << std::endl;
-
-    
+    std::cout << "Difference between FFT and DFT: " << sumreal << " + i " << sumimag << std::endl;
+    */
     //------------- exercise 1b --------------
     /*
     StepTimer stepTimerfft;
     StepTimer stepTimerdft;
     std::vector<std::complex<double>> fftResultTimed;
     std::vector<std::complex<double>> dftResultTimed;
-    std::vector<double> m;
-    for (size_t m = 1; m < std::floor(sizefft/1000); ++m) {
-        std::vector<double> dataSubset(dataLeft.begin(), dataLeft.begin() + m);
-        fftResultTimed = FFT_(dataSubset, &stepTimerfft);
-        dftResultTimed = discreteFourierTransform_(dataSubset, &stepTimerdft);
+
+    for (double i = 1; i <= 5e2; ++i) {;
+        std::vector<double> partialDataLeft(dataLeft.begin(), dataLeft.begin() + i);
+        dftResultTimed = discreteFourierTransform_(partialDataLeft, &stepTimerdft);
+        fftResultTimed = FFT_(partialDataLeft, -1, &stepTimerfft);
+
     }
     std::vector<float> fftTimes = stepTimerfft.getTimes();
     std::vector<float> dftTimes = stepTimerdft.getTimes();
-
     plotResult1b(fftTimes, dftTimes);
-
+    */
 
     //-------- exercise 1cd --------------
- 
+
     std::vector<std::pair<double, double>> powerSpectrumData = powerSpectrum_(dataLeft, sampleRate);
     std::vector<double> frequencies;
     std::vector<double> powers;
@@ -118,21 +114,47 @@ int main() {
         powers.push_back(pair.second);
     }
 
-    plotResult1c(frequencies, powers);
-    
-    //---------- exercise 1d --------------
+    //plotResult1c(frequencies, powers);
 
-    size_t index = 0;
-    auto maxpower = std::max_element(powers.begin(), powers.end());
-    if (maxpower != powers.end()) {
-        index = std::distance(powers.begin(), maxpower);
+    //--------- exercise 1de ----------------
+    std::vector<double> maxima = maxFinder_(powers);
+    std::vector<double> powersSorted = bubbleSort_(maxima);
+    size_t n = powersSorted.size();
+
+    std::vector<double> corrPowerValues(dataSize / 2, 0.0);
+    std::vector<double> corrFrequencyValue(dataSize / 2);
+
+    for (size_t i = 0; i < powersSorted.size(); ++i) {
+        auto it = std::find(powers.begin(), powers.end(), powersSorted[i]);
+        size_t index = std::distance(powers.begin(), it);
+        corrPowerValues[index] = powers[index];
+        corrFrequencyValue[i] = frequencies[index];
     }
-    double fundFrequency = frequencies[index];
-    std::cout << "Fundamental Frequenz: " << fundFrequency << std::endl;
+    //print(frequencies.size());
+    //print(corrPowerValues.size());
+    //matplot::figure(1);
+    //    matplot::plot(frequencies, corrPowerValues);
+    //    matplot::show();
+    std::cout << "Fundamental Frequenz: " << corrFrequencyValue[0] << std::endl;
     std::cout << "The note is a D_3" << std::endl;
 
-   */
-    //-------- exercise 2abc -------------
+    std::vector<std::complex<double>> invfftidealValues = FFT_(corrPowerValues, 1);
+    size_t sizeInvFFT = invfftidealValues.size();
+    std::vector<double> realInvFFT(sizeInvFFT);
+    for (size_t i = 0; i < sizeInvFFT; ++i) {
+        realInvFFT[i] = std::real(invfftidealValues[i]);
+    }
+
+    matplot::plot(realInvFFT);
+    matplot::show();
+
+
+
+
+
+
+
+    //--------- exercise 2abc --------------
     /*
     std::vector<double> x = { -5,-4,-3,-2,-1,0,1,2,3,4,5 };
     std::vector<double> y;
@@ -157,9 +179,8 @@ int main() {
         itSol = matrix.solveSOR_(matrix.rightVector, i, tolerance);
         iteration.push_back(itSol.first);
     }
-    size_t minIteraton = *std::min_element(iteration.begin()+1, iteration.end());
-    auto it = std::find(iteration.begin(), iteration.end(), minIteraton);
-    int indexMin = std::distance(iteration.begin(), it);
+    auto minIteraton = std::min_element(iteration.begin()+1, iteration.end());
+    size_t indexMin = std::distance(iteration.begin(), minIteraton);
     std::cout << indexMin << std::endl;
     double omegaofMin = omega[indexMin];
 
@@ -167,7 +188,7 @@ int main() {
     plotResult2c(omega, iteration);
     plotResult2b(splineValues);
     */
-    
+
     //-------- exercise 3 ----------------
     /*
     std::vector<std::vector<double>> data = readTxt2Matrix_("xyzm_dna.txt");
