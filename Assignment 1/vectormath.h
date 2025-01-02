@@ -114,3 +114,23 @@ std::vector<std::vector<T>> vectorVector2MatrixMultiplication_(std::vector<T> ve
 	}
 	return matrixProduct;
 }
+
+template <typename T>
+std::vector<T> euklidCrossProduct_(std::vector<T> vector1, std::vector<T> vector2) {
+	size_t vec1Size = vector1.size();
+	std::vector<T> crossProduct(vec1Size);
+	crossProduct[0] = vector1[1] * vector2[2] - vector2[1] * vector1[2];
+	crossProduct[1] = vector1[2] * vector2[0] - vector2[2] * vector1[0];
+	crossProduct[2] = vector1[0] * vector2[1] - vector2[0] * vector1[1];
+	return crossProduct;
+}
+
+template <typename T> 
+T norm_(std::vector<T> vector) {
+	size_t n = vector.size();
+	double sum = 0;
+	for (size_t i = 0; i < n; ++i) {
+		sum += vector[i] * vector[i];
+	}
+	return std::sqrt(sum);
+}
