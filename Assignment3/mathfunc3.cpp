@@ -80,23 +80,24 @@ std::vector<long double> totalForce_(std::vector<long double>& r, std::vector<lo
 std::vector<long double> totalForceDimLess_(std::vector<long double>& r, std::vector<long double>& R1, std::vector<long double>& R2, std::vector<long double>& velocity, std::vector<long double>& omega, long double m, long double M1, long double M2) {
 	const long double M_G = 6.67430e-11;
 	long double mu = M2 / (M1 + M2);
-	long double mu_1 = M1 / (M1 + M2);
 	long double RNew = norm_(R1 - R2);
 	long double MNew = M1 + M2;
-	std::vector<long double> rNew = 1 / RNew * r;
-	std::vector<long double> R1New = { mu,0,0 };
-	std::vector<long double> R2New = { mu_1,0,0 };
+	std::vector<long double> rNew = (1 / RNew) * r;
+	std::vector<long double> R1New = { -mu,0,0 };
+	std::vector<long double> R2New = { 1-mu,0,0 };
 	long double dist1 = norm_(rNew - R1New);
 	long double dist2 = norm_(rNew - R2New);
 
 	long double TNew = std::sqrt((RNew * RNew * RNew) / (M_G * MNew));
-	std::vector<long double> omegaNew = { 0, 0, (1 / TNew) };
+	std::vector<long double> omegaNew = omega * TNew;
 	std::vector<long double> vNew = (TNew / RNew) * velocity;
 
-	std::vector<long double> FG1 = -(mu_1 / (dist1 * dist1 * dist1)) * (rNew - R1New);
-	std::vector<long double> FG2 = (mu / (dist2 * dist2 * dist2)) * (rNew - R2New);
+	std::vector<long double> FG1 = -((1-mu) / (dist1 * dist1 * dist1)) * (rNew - R1New);
+	std::vector<long double> FG2 = -(mu / (dist2 * dist2 * dist2)) * (rNew - R2New);
+	std::cout << "Grav" << std::endl;
 	printVector(FG1 + FG2);
 	std::vector<long double> FI  = -2 * euklidCrossProduct_(omegaNew, vNew) - euklidCrossProduct_(omegaNew, euklidCrossProduct_(omegaNew, rNew));
+	std::cout << "Inertial" << std::endl;
 	printVector(FI);
 	return FG1 + FG2 + FI;
 }
@@ -105,7 +106,7 @@ std::vector<std::vector<long double>> forwardEuler_(std::vector<long double> r, 
 	std::vector<std::vector<long double>> position;
 	position.push_back(r);
 	for (size_t i = 0; i < n; ++i) {
-		std::vector<long double> a = 1/m * totalForceDimLess_(r, R1, R2, velocity, omega, m, M1, M2);
+		std::vector<long double> a = totalForceDimLess_(r, R1, R2, velocity, omega, m, M1, M2);
 	    velocity = velocity + dt * a;
 		r = r + dt * velocity;
 		position.push_back(r);

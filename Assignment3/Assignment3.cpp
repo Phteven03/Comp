@@ -45,18 +45,14 @@ int main() {
     std::vector<long double> R1 = { -1.0, 0, 0 };
     std::vector<long double> R2 = { 1.0, 0, 0 };
     //std::vector<long double> r = { 0, std::sqrt(3)/2, 0};
-    std::vector<long double> r = { -1.2, 0, 0};
-    std::vector<long double> velocity = { 0, 0.001, 0 };
+    std::vector<long double> r = { 0, 0, 0};
+    std::vector<long double> velocity = { 0, 0, 0 };
     std::vector<long double> omega = { 0, 0, 0.0001 };
     long double m = 1.0e-3;
-    long double M1 = 1.0e5;
-    long double M2 = 1.0e2;
-    long double dt = 0.0001;
-    size_t n = 1000;
-
-    std::vector<long double> totalForce = totalForce_(r, R1, R2, velocity, omega, m, M1, M2);
-    std::vector<long double> totalForceDimLess = totalForceDimLess_(r, R1, R2, velocity, omega, m, M1, M2);
-
+    long double M1 = 1.0e2;
+    long double M2 = 1.0e3;
+    long double dt = 0.0019;
+    size_t n = 2000;
 
     std::vector<std::vector<long double>> ri = forwardEuler_(r, R1, R2, velocity, omega, m, M1, M2, dt, n);
     std::vector<long double> xi;
@@ -71,12 +67,14 @@ int main() {
     std::vector<long double> Ry = { R1[1],R2[1] };
     std::vector<long double> Rz = { R1[2],R2[2] };
 
-    matplot::plot3(xi,yi,zi);
+    matplot::plot(xi,yi);
     matplot::hold(matplot::on);
-    matplot::plot3(Rx, Ry, Rz,"r.");
-    matplot::hold(matplot::off);
+    matplot::plot(Rx, Ry, "r.");
+    matplot::text(R1[0], R1[1], "M1");
+    matplot::text(R2[0], R2[1], "M2");
     matplot::xlabel("X");
     matplot::ylabel("Y");
     matplot::zlabel("Z");
+    matplot::hold(matplot::off);
     matplot::show();
 }

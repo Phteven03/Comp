@@ -125,12 +125,11 @@ std::vector<T> euklidCrossProduct_(std::vector<T> vector1, std::vector<T> vector
 	return crossProduct;
 }
 
-template <typename T> 
-T norm_(std::vector<T> vector) {
-	size_t n = vector.size();
+template <typename T>
+double norm_(const std::vector<T>& vector) {
 	double sum = 0;
-	for (size_t i = 0; i < n; ++i) {
-		sum += vector[i] * vector[i];
+	for (const auto& val : vector) {
+		sum += val * val;
 	}
-	return std::sqrt(sum);
+	return static_cast<T>(std::sqrt(sum));;
 }
