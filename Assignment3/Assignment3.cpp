@@ -14,7 +14,7 @@ const long double M_G = 6.67430e-11;
 int main() {
     //-------exercise 1 --------
     /*
-    const int numCharges = 5;
+    const int numCharges = 6;
     const double stepSize = 1e-3;
     const double maxIterations = 100000;
 
@@ -38,23 +38,44 @@ int main() {
     }
 
     plotresult1c_(chargeX, chargeY, chargeZ);
+    
     */
 
     //------- exercise 3----------
-
+    
+    //start
     std::vector<long double> R1 = { -1.0, 0, 0 };
     std::vector<long double> R2 = { 1.0, 0, 0 };
     //std::vector<long double> r = { 0, std::sqrt(3)/2, 0};
-    std::vector<long double> r = { 0, 0, 0};
-    std::vector<long double> velocity = { 0, 0, 0 };
-    std::vector<long double> omega = { 0, 0, 0.0001 };
-    long double m = 1.0e-3;
-    long double M1 = 1.0e2;
-    long double M2 = 1.0e3;
-    long double dt = 0.0019;
-    size_t n = 2000;
+    std::vector<long double> r = { 0, 1, 0};
+    std::vector<long double> velocity = { 0, -0.1, 0 };
+    std::vector<long double> omega = { 0, 0, -1000 };
+    long double M1 = 1.0e3;
+    long double M2 = 1.0e5;
+    long double dt = 0.001;
+    size_t n = 10000;
 
-    std::vector<std::vector<long double>> ri = forwardEuler_(r, R1, R2, velocity, omega, m, M1, M2, dt, n);
+    //scaling factors
+    long double L = norm_(R2 - R1);
+    long double M = M1 + M2;
+    long double T = 1 / std::abs(omega[2]);
+
+    //funciton variabls dimensionless
+    std::vector<long double> rNew = 1 / L * r;
+    std::vector<long double> R1New = 1 / L * R1;
+    std::vector<long double> R2New = 1 / L * R2;
+    std::vector<long double> vNew = (T / L) * velocity;
+    std::vector<long double> omegaNew = omega * T;
+    long double mu = M2 / M;
+
+    std::vector<std::vector<long double>> ri = forwardEuler_(rNew,R1New,R2New,omegaNew,vNew,mu,dt,n);
+
+
+
+    std::vector<long double> Rx = { -(1-mu),mu};
+    std::vector<long double> Ry = { 0,0 };
+
+
     std::vector<long double> xi;
     std::vector<long double> yi;
     std::vector<long double> zi;
@@ -63,18 +84,16 @@ int main() {
             yi.push_back(pos[1]);
             zi.push_back(pos[2]);
     }
-    std::vector<long double> Rx = { R1[0],R2[0] };
-    std::vector<long double> Ry = { R1[1],R2[1] };
-    std::vector<long double> Rz = { R1[2],R2[2] };
 
     matplot::plot(xi,yi);
     matplot::hold(matplot::on);
     matplot::plot(Rx, Ry, "r.");
-    matplot::text(R1[0], R1[1], "M1");
-    matplot::text(R2[0], R2[1], "M2");
+    matplot::text(Rx[0], Ry[0], "M1");
+    matplot::text(Rx[1], Ry[1], "M2");
     matplot::xlabel("X");
     matplot::ylabel("Y");
     matplot::zlabel("Z");
     matplot::hold(matplot::off);
-    matplot::show();
+    matplot::show(); 
+    
 }

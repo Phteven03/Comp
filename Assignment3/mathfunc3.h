@@ -49,8 +49,8 @@ std::vector<long double> inertialForce_(std::vector<long double>& r, std::vector
 
 std::vector<long double> totalForce_(std::vector<long double>& r, std::vector<long double>& R1, std::vector<long double>& R2, std::vector<long double>& velocity, std::vector<long double>& omega, long double m, long double M1, long double M2);
 
-std::vector<long double> totalForceDimLess_(std::vector<long double>& r, std::vector<long double>& R1, std::vector<long double>& R2, std::vector<long double>& velocity, std::vector<long double>& omega, long double m, long double M1, long double M2);
+std::vector<long double> totalForceDimLess_(std::vector<long double> rNew, std::vector<long double> R1New, std::vector<long double> R2New, std::vector<long double> omegaNew, std::vector<long double> vNew, long double mu);
 
-std::vector<std::vector<long double>> forwardEuler_(std::vector<long double> r, std::vector<long double>& R1, std::vector<long double>& R2, std::vector<long double> velocity, std::vector<long double>& omega, long double m, long double M1, long double M2, long double dt, int n);
+std::vector<std::vector<long double>> forwardEuler_(std::vector<long double> rNew, std::vector<long double> R1New, std::vector<long double> R2New, std::vector<long double> omegaNew, std::vector<long double> vNew, long double mu, long double dt, int n);
 
 
