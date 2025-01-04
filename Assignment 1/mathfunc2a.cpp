@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "mathfunc2a.h"
 
 #include <iostream>
 #include <vector>

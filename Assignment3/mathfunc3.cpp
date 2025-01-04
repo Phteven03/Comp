@@ -1,7 +1,9 @@
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <vectormath.h>
+#include "mathfunc2a.h"
 
 #include "mathfunc3.h"
 
@@ -10,6 +12,7 @@
 double orthodrome_(const charge& q1, const charge& q2) {
 	return std::acos(std::sin(q1.theta) * std::sin(q2.theta) * std::cos(q1.phi - q2.phi) + std::cos(q1.theta) * std::cos(q2.theta));
 }
+
 double totalEnergy_(std::vector<charge> charges) {
 	double energy = 0.0;
 	size_t vecSize = charges.size();
@@ -46,12 +49,14 @@ void gradientDecent_(std::vector<charge>& charges, double stepSize, double maxIt
 	for (size_t iter = 0; iter < maxIterations; ++iter) {
 
 		numericalGradient_(charges, 1e-4);
-
 		for (auto& charge : charges) {
 			double deltaTheta = -stepSize * charge.gradTheta;
 			double deltaPhi = -stepSize * charge.gradPhi;
-
-			charge.theta += deltaTheta;
+			//std::cout << "gradTheta" << std::endl;
+			//std::cout << charge.gradTheta << std::endl;
+			//std::cout << "gradPhi" << std::endl;
+			//std::cout << charge.gradPhi << std::endl;
+			charge.theta += deltaTheta; 
 			charge.phi += deltaPhi;
 		}
 	}
@@ -85,13 +90,13 @@ std::vector<long double> totalForceDimLess_(std::vector<long double> rNew, std::
 	//gravitational Forces F1 & F2
 	std::vector<long double> F1 = - mu / (dist1 * dist1 * dist1) * (rNew - R1New);
 	std::vector<long double> F2 = - (1-mu) / (dist2 * dist2 * dist2) * (rNew - R2New);
-	std::cout << "Grav" << std::endl;
-	printVector(F1 + F2);
+	//std::cout << "Grav" << std::endl;
+	//printVector(F1 + F2);
 
 	//inertial Force FI
 	std::vector<long double> FI = -2 * euklidCrossProduct_(omegaNew, vNew) - euklidCrossProduct_(omegaNew, euklidCrossProduct_(omegaNew, rNew));
-	std::cout << "Inertial" << std::endl;
-	printVector(FI);
+	//std::cout << "Inertial" << std::endl;
+	//printVector(FI);
 	return F1 + F2 + FI;
 }
 
@@ -106,5 +111,36 @@ std::vector<std::vector<long double>> forwardEuler_(std::vector<long double> rNe
 		position.push_back(rNew);
 	}
 	return position;
+}
+
+std::vector<std::vector<double>> lagrangePointFinder_(long double mu) {
+	std::vector<std::vector<double>> lagrangePoints;
+
+	double muNew = static_cast<double>(mu);
+	double muNew_ = 1-muNew;
+	double leftLimit = -1;
+	double rightLimit = 1;
+
+	std::vector<std::vector<double>> LPolys = { { -muNew, 2 * muNew, -muNew, 3 - 2 * muNew, muNew - 3, 1 } , { -muNew, -2 * muNew, -muNew, 3 - 2 * muNew, 3 - muNew, 1 }, { -muNew, 12 + 14 * muNew, -24 - 13 * muNew, 6 * muNew + 19, -7 - muNew, 1 } };
+
+	std::vector<double> muNewVec = { muNew };
+
+	for (const auto& Li : LPolys) {
+		std::vector<double> roots = polyRootNewtonRaphson_(Li, leftLimit, rightLimit)-muNewVec;
+		roots.push_back(0.0);
+		printVector(roots);
+		lagrangePoints.push_back(roots);
+	}
+
+	double r = 1 + muNew_ * muNew_ - 2 * muNew_ * std::cos(M_PI / 3);
+	double phi = std::acos((r * r + muNew_ * muNew_ - 1) / (2 * r * muNew_));
+	print(phi);
+	std::vector<double> L4 = {r * std::cos(phi) , r * std::sin(phi) };
+	std::vector<double> L5 = {r * std::cos(-phi) , r * std::sin(-phi) };
+
+	lagrangePoints.push_back(L4);
+	lagrangePoints.push_back(L5);
+
+	return lagrangePoints;
 }
 
