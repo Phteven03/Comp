@@ -42,7 +42,7 @@ void plotresult1c_(std::vector<double> chargeX, std::vector<double>chargeY, std:
 
 void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::vector<double>> lagrangePoints, long double mu) {
 
-    std::vector<long double> Rx = { -(1 - mu),mu };
+    std::vector<long double> Rx = { -mu, 1-mu };
     std::vector<long double> Ry = { 0,0 };
 
 
@@ -62,9 +62,9 @@ void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::ve
         Lyi.push_back(pos[1]);
     }
 
-    matplot::plot(Lxi, Lyi, "r.");
-    //matplot::plot(xi, yi);
+    matplot::plot(Lxi, Lyi, "g.");
     matplot::hold(matplot::on);
+    matplot::plot(xi, yi);
     matplot::plot(Rx, Ry, "r.");
     matplot::text(Rx[0], Ry[0], "M1");
     matplot::text(Rx[1], Ry[1], "M2");

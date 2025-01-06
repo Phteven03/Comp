@@ -54,3 +54,5 @@ std::vector<long double> totalForceDimLess_(std::vector<long double> rNew, std::
 std::vector<std::vector<long double>> forwardEuler_(std::vector<long double> rNew, std::vector<long double> R1New, std::vector<long double> R2New, std::vector<long double> omegaNew, std::vector<long double> vNew, long double mu, long double dt, int n);
 
 std::vector<std::vector<double>> lagrangePointFinder_(long double mu);
+
+std::vector<double> rungeKutta_(double x, std::vector<double> y, double h, std::function<std::vector<double>(double, std::vector<double>)>func);
