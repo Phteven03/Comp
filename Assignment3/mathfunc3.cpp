@@ -5,6 +5,7 @@
 #include <vectormath.h>
 #include <functional>
 #include "mathfunc2a.h"
+#include "mathfunc1a.h"
 
 #include "mathfunc3.h"
 

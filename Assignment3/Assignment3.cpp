@@ -7,6 +7,7 @@
 #include <random>
 #include <functional>
 #include "mathfunc2a.h"
+#include "mathfunc1a.h"
 
 #include "mathfunc3.h"
 #include "plot3.h"
@@ -32,7 +33,7 @@ static double psiL_(double E, double m, double lambda, double omega, double hbar
 
     auto schroedinger = [&m, &lambda, &omega, &hbar, &E](double x, std::vector<double> y) {
         return schroedinger_(x, m, lambda, omega, hbar, E, y);
-        };
+    };
 
     while (x < L) {
         y = rungeKutta_(x, y, h, schroedinger);
@@ -45,14 +46,14 @@ static double psiL_(double E, double m, double lambda, double omega, double hbar
 static std::vector<std::vector<double>> findBracket_(double m, double lambda, double omega, double hbar, double L, double h, double N, bool even) {
     std::vector<std::vector<double>> significantIntervalls;
 
-    double EStart = 0.1;
-    const double stepWidth = 1e-2;
+    double EStart = 0.4;
+    const double stepWidth = 1e-1;
     double previousPsi = psiL_(EStart, m, lambda, omega, hbar, L, h, even);
     double previousE = EStart;
 
     size_t iteration = 0;
 
-    while (iteration < N / 2) {
+    while (iteration < (N / 2)) {
         double currentE = previousE + stepWidth;
         double currentPsi = psiL_(currentE, m, lambda, omega, hbar, L, h, even);
 
@@ -62,15 +63,13 @@ static std::vector<std::vector<double>> findBracket_(double m, double lambda, do
         }
         previousPsi = currentPsi;
         previousE = currentE;
-        if (currentE > 100.0) {  // Maximale Energie begrenzen
-            break;
-        }
     }
 
     return significantIntervalls;
 }
 
 static std::vector<double> eigenEnergyFinder_(double m, double lambda, double omega, double hbar, double L, double h, double N, bool even, double tolerance) {
+
     // Bracketing
     std::vector<std::vector<double>> guessIntervalls = findBracket_(m,lambda,omega,hbar,L,h,N,even);
 
@@ -82,16 +81,12 @@ static std::vector<double> eigenEnergyFinder_(double m, double lambda, double om
         double rightLimit = interval[1];
         double leftValue = psiL_(leftLimit, m, lambda, omega, hbar, L, h, even);
         double rightValue = psiL_(rightLimit, m, lambda, omega, hbar, L, h, even);
+        double midpoint;
 
         // Bisection method to narrow down root intervals
         while ((rightLimit - leftLimit) / 2.0 > tolerance) {
-            double midpoint = (leftLimit + rightLimit) / 2.0;
+            midpoint = (leftLimit + rightLimit) / 2.0;
             double midpointValue = psiL_(midpoint, m, lambda, omega, hbar, L, h, even);
-
-            if (std::abs(midpointValue) < tolerance) {  // Root found within tolerance
-                energies.push_back(midpoint);
-                break;
-            }
 
             // Determine which side of the interval contains the root
             if (leftValue * midpointValue < 0) {
@@ -103,9 +98,7 @@ static std::vector<double> eigenEnergyFinder_(double m, double lambda, double om
                 leftValue = midpointValue;
             }
         }
-        if (std::abs(leftLimit - rightLimit) <= tolerance) {
-            energies.push_back((leftLimit + rightLimit) / 2.0);
-        }
+        energies.push_back(midpoint);
     }
 
     return energies;
@@ -201,17 +194,18 @@ int main() {
     */
 
     //------exercise 4 ---------
+    /*
     const double m = 1.0;
     const double lambda = 24;
     const double omega = 1.0;
     const double hbar = 1.0;
     const double L = 10.0;
-    const double h = 0.001; //stepSize for Runge-Kutta
+    const double h = 0.01; //stepSize for Runge-Kutta
     const double tolerance = 1e-10;
     const double N = 10;
 
     std::vector<double> evenEigenEnergy = eigenEnergyFinder_(m,  lambda,  omega,  hbar,  L,  h,  N, true ,  tolerance);
-    std::vector<double> oddEigenEnergy = eigenEnergyFinder_(m,  lambda,  omega,  hbar,  L,  h,  N, false ,  tolerance);
+    std::vector<double> oddEigenEnergy = eigenEnergyFinder_(m, lambda, omega, hbar, L, h, N, false, tolerance);
 
     std::cout << "even:" << std::endl;
     //print(evenEigenEnergy.size());
@@ -219,7 +213,5 @@ int main() {
     std::cout << "odd:" << std::endl;
     //print(oddEigenEnergy.size());
     printVector(oddEigenEnergy);
-
-    
-
+    */
 }
