@@ -7,4 +7,4 @@
 
 void plotresult1c_(std::vector<double> chargeX, std::vector<double>chargeY, std::vector<double>chargeZ);
 
-void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::vector<double>> lagrangePoints, long double mu);
+void plotresult3b_(std::vector<std::vector<double>> ri, std::vector<std::vector<double>> lagrangePoints, double mu);

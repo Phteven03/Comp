@@ -24,7 +24,7 @@ void plotresult1c_(std::vector<double> chargeX, std::vector<double>chargeY, std:
     }
 
     auto s = matplot::surf(x, y, z);
-    s->face_alpha(0.1);
+    s->face_alpha(0);
     s->edge_color("none");
     s->contour_surface(matplot::off);
     matplot::hold(matplot::on);
@@ -40,23 +40,23 @@ void plotresult1c_(std::vector<double> chargeX, std::vector<double>chargeY, std:
 
 }
 
-void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::vector<double>> lagrangePoints, long double mu) {
+void plotresult3b_(std::vector<std::vector<double>> ri, std::vector<std::vector<double>> lagrangePoints, double mu) {
 
-    std::vector<long double> Rx = { -mu, 1-mu };
-    std::vector<long double> Ry = { 0,0 };
+    std::vector<double> Rx = { -mu, 1-mu };
+    std::vector<double> Ry = { 0,0 };
 
 
-    std::vector<long double> xi;
-    std::vector<long double> yi;
-    std::vector<long double> zi;
+    std::vector<double> xi;
+    std::vector<double> yi;
+    std::vector<double> zi;
     for (const auto& pos : ri) {
         xi.push_back(pos[0]);
         yi.push_back(pos[1]);
         zi.push_back(pos[2]);
     }
 
-    std::vector<long double> Lxi;
-    std::vector<long double> Lyi;
+    std::vector<double> Lxi;
+    std::vector<double> Lyi;
     for (const auto& pos : lagrangePoints) {
         Lxi.push_back(pos[0]);
         Lyi.push_back(pos[1]);
@@ -66,6 +66,13 @@ void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::ve
     matplot::hold(matplot::on);
     matplot::plot(xi, yi);
     matplot::plot(Rx, Ry, "r.");
+
+    std::vector<double> startpointX = { xi[0] };
+    std::vector<double> startpointY = { yi[0] };
+
+    matplot::plot(startpointX, startpointY, "b.");
+    matplot::text(xi[0], yi[0], "Startpoint");
+
     matplot::text(Rx[0], Ry[0], "M1");
     matplot::text(Rx[1], Ry[1], "M2");
 
@@ -75,9 +82,9 @@ void plotresult3b_(std::vector<std::vector<long double>> ri, std::vector<std::ve
     matplot::text(lagrangePoints[3][0], lagrangePoints[3][1], "L4");
     matplot::text(lagrangePoints[4][0], lagrangePoints[4][1], "L5");
 
-    matplot::xlabel("X");
-    matplot::ylabel("Y");
-    matplot::zlabel("Z");
+    matplot::xlabel("X / 1");
+    matplot::ylabel("Y / 1");
     matplot::hold(matplot::off);
+    matplot::grid(matplot::on);
     matplot::show();
 }
