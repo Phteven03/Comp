@@ -58,7 +58,7 @@ int main() {
     
     
     //------- exercise 3----------
-    
+    /*
     //L1 = 0.848624 0
     //L2 = 1.14632 0
     //L3 = -1.00082 0
@@ -69,18 +69,18 @@ int main() {
     std::vector<double> R1 = { -1, 0, 0 };
     std::vector<double> R2 = { 1, 0, 0 };
     //std::vector<double> r = { 0, std::sqrt(3)/2, 0};
-    std::vector<double> r = { 0.848624, 0.9, 0.0};
+    std::vector<double> r = { -1, 0.5, 0.0};
     std::vector<double> velocity = { 0, 0, 0 };
-    std::vector<double> omega = { 0, 0, 1 };
+    std::vector<double> omega = { 0, 0, 420 };
     double M1 = 1.0e7;
     double M2 = 1.0e5;
-    double dt = 0.00001;
+    double dt = 0.0001;
     size_t n = 20000;
 
     //scaling factors
     double M = M1 + M2;
     double T = 2 * M_PI / std::abs(omega[2]);
-    double L = norm_(R1 + R2);
+    double L = norm_(R1 - R2);
 
 
 
@@ -89,9 +89,9 @@ int main() {
     std::vector<double> rNew = r;
     std::vector<double> R1New = {-mu,0,0};
     std::vector<double> R2New = {1 - mu,0,0};
-    std::vector<double> vNew = velocity * T; // (1 / std::sqrt(M1 + M2));
+    std::vector<double> vNew = velocity * (1 / std::sqrt(M1 + M2));
     printVector(vNew);
-    std::vector<double> omegaNew = omega * T; // (1 / std::sqrt(M1 + M2));
+    std::vector<double> omegaNew = omega * (1 / std::sqrt(M1 + M2));
 
 
     std::vector<std::vector<double>> ri = forwardEuler_(rNew,R1New,R2New,omegaNew,vNew,mu,dt,n);
@@ -101,7 +101,32 @@ int main() {
     printMatrix(lagrangePoints);
 
     plotresult3b_(ri, lagrangePoints, mu);
+    */
+
+
+    //----- exercise 3 new ----------
     
+    std::vector<double> R1 = { -1, 0, 0 };
+    std::vector<double> R2 = { 1, 0, 0 };
+    std::vector<double> r = { 0.0, 1.0, 0.0 };
+
+    std::vector<double> velocity = { 0, 0, 0 };
+    std::vector<double> omega = { 0, 0, 0.01 };
+
+    double M1 = 1.0e22;
+    double M2 = 1.0e22;
+    double m = 1.0e3;
+
+    std::vector<double> totalforce = totalForce_(r, R1, R2, velocity, omega, m, M1, M2);
+
+
+    
+
+
+
+
+
+
 
     //------exercise 4 ---------
     /*

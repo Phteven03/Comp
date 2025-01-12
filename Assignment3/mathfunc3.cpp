@@ -97,10 +97,24 @@ std::vector<double> inertialForce_(std::vector<double>& r, std::vector<double>& 
 
 std::vector<double> totalForce_(std::vector<double>& r, std::vector<double>& R1, std::vector<double>& R2, std::vector<double>& velocity, std::vector<double>& omega, double m, double M1, double M2) {
 	// Gravitational forces from both heavy bodies
-	std::vector<double> grav1 = gravitationalForce_(r, R1, m, M1);
-	std::vector<double> grav2 = gravitationalForce_(r, R2, m, M2);
+    double M_G = 6.67430e-11;
+
+    double L = norm_(R1 - R2);
+    print(L);
+    double T = 2 * M_PI / norm_(omega);
+    print(T);
+    double M = M1 + M2;
+    print(M);
+
+    double dimlessFactor = L * L / (M_G * M * M);
+
+	std::vector<double> grav1 = gravitationalForce_(r, R1, m, M1) * dimlessFactor;
+    printVector(grav1);
+	std::vector<double> grav2 = gravitationalForce_(r, R2, m, M2) * dimlessFactor;
+    printVector(grav2);
 	// Inertial forces
-	std::vector<double> inert = inertialForce_(r, velocity, omega, m);
+	std::vector<double> inert = inertialForce_(r, velocity, omega, m) * dimlessFactor;
+    printVector(inert);
 	return grav1 + grav2 + inert;
 }
 
@@ -121,12 +135,13 @@ std::vector<double> totalForceDimLess_(std::vector<double> rNew, std::vector<dou
 	return F1 + F2 + FI;
 }
 
+
 std::vector<std::vector<double>> forwardEuler_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu, double dt, int n) {
 	std::vector<std::vector<double>> position;
 	position.push_back(rNew);
 
 	for (size_t i = 0; i < n; ++i) {
-		std::vector<double> a = totalForceDimLess_(rNew, R1New, R2New, omegaNew, vNew, mu);
+		std::vector<double> a = totalForce_(rNew, R1New, R2New, omegaNew, vNew, mu);
 		vNew = vNew + dt * a;  // Update velocity
 		rNew = rNew + dt * vNew;  // Update position
 		position.push_back(rNew);
