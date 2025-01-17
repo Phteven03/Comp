@@ -10,7 +10,7 @@
 #include "mathfunc3.h"
 
 
-//----- Function for exercise 1 
+//----- Functions for exercise 1 
 
 double potential_(double x, double m, double lambda, double omega) {
     return 0.5 * m * m * omega * omega * x * x + (lambda / 24.0) * x * x * x * x;
@@ -76,55 +76,16 @@ void gradientDecent_(std::vector<charge>& charges, double stepSize, double maxIt
 }
 
 
-// -------- Functions for exercise 2 
 
 //------ Functions for exercise 3
-
-std::vector<double> gravitationalForce_(std::vector<double>& r, std::vector<double>& R, double massLight, double massHeavy) {
-	const double M_G = 6.67430e-11; // Gravitational constant
-	std::vector<double> diffVec = r - R;
-	double distance = norm_(diffVec);
-	return diffVec * (-M_G * massLight * massHeavy / (distance * distance * distance));
-}
-
-std::vector<double> inertialForce_(std::vector<double>& r, std::vector<double>& velocity, std::vector<double>& omega, double massLight) {
-	// Centrifugal force
-	std::vector<double> centrifugalForce = euklidCrossProduct_(omega, euklidCrossProduct_(omega, r)) * massLight;
-	// Coriolis force
-	std::vector<double> coriolisForce = euklidCrossProduct_(omega, velocity) * (-2.0 * massLight);
-	return centrifugalForce + coriolisForce;
-}
-
-std::vector<double> totalForce_(std::vector<double>& r, std::vector<double>& R1, std::vector<double>& R2, std::vector<double>& velocity, std::vector<double>& omega, double m, double M1, double M2) {
-	// Gravitational forces from both heavy bodies
-    double M_G = 6.67430e-11;
-
-    double L = norm_(R1 - R2);
-    print(L);
-    double T = 2 * M_PI / norm_(omega);
-    print(T);
-    double M = M1 + M2;
-    print(M);
-
-    double dimlessFactor = L * L / (M_G * M * M);
-
-	std::vector<double> grav1 = gravitationalForce_(r, R1, m, M1) * dimlessFactor;
-    printVector(grav1);
-	std::vector<double> grav2 = gravitationalForce_(r, R2, m, M2) * dimlessFactor;
-    printVector(grav2);
-	// Inertial forces
-	std::vector<double> inert = inertialForce_(r, velocity, omega, m) * dimlessFactor;
-    printVector(inert);
-	return grav1 + grav2 + inert;
-}
 
 std::vector<double> totalForceDimLess_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu) {
 	double dist1 = norm_(rNew - R1New);
 	double dist2 = norm_(rNew - R2New);
 
 	// Gravitational forces in the dimensionless system
-	std::vector<double> F1 = -mu / (dist1 * dist1 * dist1) * (rNew - R1New);
-	std::vector<double> F2 = -(1 - mu) / (dist2 * dist2 * dist2) * (rNew - R2New);
+	std::vector<double> F1 = - (1 - mu) / (dist1 * dist1 * dist1) * (rNew - R1New);
+	std::vector<double> F2 = - mu / (dist2 * dist2 * dist2) * (rNew - R2New);
     //std::cout << "Grav:" << std::endl;
     //printVector(F1 + F2);
 
@@ -141,7 +102,7 @@ std::vector<std::vector<double>> forwardEuler_(std::vector<double> rNew, std::ve
 	position.push_back(rNew);
 
 	for (size_t i = 0; i < n; ++i) {
-		std::vector<double> a = totalForce_(rNew, R1New, R2New, omegaNew, vNew, mu);
+		std::vector<double> a = totalForceDimLess_(rNew, R1New, R2New, omegaNew, vNew, mu);
 		vNew = vNew + dt * a;  // Update velocity
 		rNew = rNew + dt * vNew;  // Update position
 		position.push_back(rNew);
@@ -149,18 +110,57 @@ std::vector<std::vector<double>> forwardEuler_(std::vector<double> rNew, std::ve
 	return position;
 }
 
+std::vector<std::vector<double>> rungeKutta4_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu, double dt, int n) {
+    std::vector<std::vector<double>> position;
+    position.push_back(rNew);
+
+    for (int i = 0; i < n; ++i) {
+        // k1 calculations
+        std::vector<double> a1 = totalForceDimLess_(rNew, R1New, R2New, omegaNew, vNew, mu);
+        std::vector<double> v1 = vNew;
+        std::vector<double> r1 = rNew;
+
+        // k2 calculations
+        std::vector<double> vTemp2 = v1 + 0.5 * dt * a1;
+        std::vector<double> rTemp2 = r1 + 0.5 * dt * v1;
+        std::vector<double> a2 = totalForceDimLess_(rTemp2, R1New, R2New, omegaNew, vTemp2, mu);
+
+        // k3 calculations
+        std::vector<double> vTemp3 = v1 + 0.5 * dt * a2;
+        std::vector<double> rTemp3 = r1 + 0.5 * dt * vTemp2;
+        std::vector<double> a3 = totalForceDimLess_(rTemp3, R1New, R2New, omegaNew, vTemp3, mu);
+
+        // k4 calculations
+        std::vector<double> vTemp4 = v1 + dt * a3;
+        std::vector<double> rTemp4 = r1 + dt * vTemp3;
+        std::vector<double> a4 = totalForceDimLess_(rTemp4, R1New, R2New, omegaNew, vTemp4, mu);
+
+        // Combine k1, k2, k3, k4
+        std::vector<double> deltaV = (1.0 / 6.0) * dt * (a1 + 2.0 * a2 + 2.0 * a3 + a4);
+        std::vector<double> deltaR = (1.0 / 6.0) * dt * (v1 + 2.0 * vTemp2 + 2.0 * vTemp3 + vTemp4);
+
+        // Update velocity and position
+        vNew = vNew + deltaV;
+        rNew = rNew + deltaR;
+
+        // Save the position
+        position.push_back(rNew);
+    }
+
+    return position;
+}
+
 std::vector<std::vector<double>> lagrangePointFinder_(double mu) {
     std::vector<std::vector<double>> lagrangePoints;
-
-    double muNew = static_cast<double>(mu);
     double leftLimit = -2; // Left limit for root-finding.
     double rightLimit = 2; // Right limit for root-finding.
 
+
     // Polynomial coefficients for L1, L2, and L3 points.
     std::vector<std::vector<double>> LPolys = {
-        { -muNew, 2 * muNew, -muNew, 3 - 2 * muNew, muNew - 3, 1 },
-        { -muNew, -2 * muNew, -muNew, 3 - 2 * muNew, 3 - muNew, 1 },
-        { -muNew, 12 + 14 * muNew, -24 - 13 * muNew, 6 * muNew + 19, -7 - muNew, 1 }
+        { -mu, 2 * mu, -mu, 3 - 2 * mu, mu - 3, 1 },
+        { -mu, -2 * mu, -mu, 3 - 2 * mu, 3 - mu, 1 },
+        { -mu, 12 + 14 * mu, -24 - 13 * mu, 6 * mu + 19, -7 - mu, 1 }
     };
 
     for (const auto& Li : LPolys) {
@@ -176,8 +176,8 @@ std::vector<std::vector<double>> lagrangePointFinder_(double mu) {
     lagrangePoints[2][0] = -1 - lagrangePoints[2][0]; // L3 x-coordinate.
 
     // Add L4 and L5 coordinates based on trigonometric positions.
-    std::vector<double> L4 = { std::cos(M_PI / 3) - muNew, std::sin(M_PI / 3) };
-    std::vector<double> L5 = { std::cos(-M_PI / 3) - muNew, std::sin(-M_PI / 3) };
+    std::vector<double> L4 = { std::cos(M_PI / 3) - mu, std::sin(M_PI / 3) };
+    std::vector<double> L5 = { std::cos(-M_PI / 3) - mu, std::sin(-M_PI / 3) };
     lagrangePoints.push_back(L4);
     lagrangePoints.push_back(L5);
 
@@ -205,7 +205,7 @@ std::vector<double> schroedinger_(double x, double m, double lambda, double omeg
 }
 
 double psiL_(double E, double m, double lambda, double omega, double hbar, double L, double h, bool even) {
-    std::vector<double> y = even ? std::vector<double>{1.0, 0.0} : std::vector<double>{ 0.0, 1.0 }; // Initial conditions.
+    std::vector<double> y = even ? std::vector<double>{ 1.0, 0.0 } : std::vector<double>{ 0.0, 1.0 }; // Initial conditions.
     double x = 0.0;
 
     auto schroedinger = [&m, &lambda, &omega, &hbar, &E](double x, std::vector<double> y) {

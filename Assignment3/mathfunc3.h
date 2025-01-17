@@ -34,6 +34,8 @@ struct charge {
     double gradTheta; // Gradient of energy with respect to theta
 };
 
+//----- Functions for exercise 1 
+
 /*
 Computes the potential energy for a given position in an anharmonic oscillator.
 @param x The position at which the potential is evaluated.
@@ -82,39 +84,7 @@ Performs gradient descent optimization to minimize the system's energy.
 */
 void gradientDecent_(std::vector<charge>& charges, double stepSize, double maxIterations);
 
-/*
-Computes the gravitational force between two bodies.
-@param r Position of the light body.
-@param R Position of the heavy body.
-@param massLight Mass of the light body.
-@param massHeavy Mass of the heavy body.
-@return Gravitational force vector.
-*/
-std::vector<double> gravitationalForce_(std::vector<double>& r, std::vector<double>& R, double massLight, double massHeavy);
-
-/*
-Computes inertial forces (centrifugal and Coriolis) acting on a body.
-@param r Position of the body in the rotating frame.
-@param velocity Velocity of the body in the rotating frame.
-@param omega Angular velocity vector of the rotating frame.
-@param massLight Mass of the body.
-@return Inertial force vector.
-*/
-std::vector<double> inertialForce_(std::vector<double>& r, std::vector<double>& velocity, std::vector<double>& omega, double massLight);
-
-/*
-Calculates the total force (gravitational + inertial) acting on a body.
-@param r Position of the light body.
-@param R1 Position of the first heavy body.
-@param R2 Position of the second heavy body.
-@param velocity Velocity of the light body.
-@param omega Angular velocity vector of the rotating frame.
-@param m Mass of the light body.
-@param M1 Mass of the first heavy body.
-@param M2 Mass of the second heavy body.
-@return Total force vector.
-*/
-std::vector<double> totalForce_(std::vector<double>& r, std::vector<double>& R1, std::vector<double>& R2, std::vector<double>& velocity, std::vector<double>& omega, double m, double M1, double M2);
+//------ Functions for exercise 3
 
 /*
 Calculates the total force in a dimensionless system.
@@ -128,19 +98,11 @@ Calculates the total force in a dimensionless system.
 */
 std::vector<double> totalForceDimLess_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu);
 
-/*
-Solves the equations of motion using the forward Euler method.
-@param rNew Initial position vector.
-@param R1New Position of the first heavy body.
-@param R2New Position of the second heavy body.
-@param omegaNew Angular velocity vector.
-@param vNew Initial velocity vector.
-@param mu Mass ratio parameter.
-@param dt Time step.
-@param n Number of iterations.
-@return A vector of position vectors at each time step.
-*/
+
 std::vector<std::vector<double>> forwardEuler_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu, double dt, int n);
+
+
+std::vector<std::vector<double>> rungeKutta4_(std::vector<double> rNew, std::vector<double> R1New, std::vector<double> R2New, std::vector<double> omegaNew, std::vector<double> vNew, double mu, double dt, int n);
 
 /*
 Finds the Lagrange points for a given mass ratio (mu) in the circular restricted three-body problem.
@@ -148,6 +110,8 @@ Finds the Lagrange points for a given mass ratio (mu) in the circular restricted
 @return A vector of vectors, where each inner vector represents the coordinates of a Lagrange point.
 */
 std::vector<std::vector<double>> lagrangePointFinder_(double mu);
+
+// ------ Functions for exercise 4
 
 /*
 Performs a single step of the Runge-Kutta method for solving ODEs.
