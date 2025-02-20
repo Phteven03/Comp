@@ -62,3 +62,17 @@ std::vector<std::vector<T>> matrixMatrixSubtraction_(std::vector<std::vector<T>>
     }
     return matrix1;
 }
+
+template <typename T>
+std::vector<T> cumsumVector(std::vector<T> vector)
+{
+    size_t n = vector.size();
+    T sum = 0;
+    for (size_t i = 0; i < n; ++i)
+    {
+        sum += vector[i];
+        vector[i] = sum;
+    }
+
+    return vector;
+}

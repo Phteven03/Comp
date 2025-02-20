@@ -17,8 +17,9 @@ const double M_G = 6.67430e-11;
 
 int main() {
     //-------exercise 1 --------
- /*
-    const int numCharges = 12;
+    StepTimer timer;
+	timer.startTimer();
+    const int numCharges = 3;
     const double stepSize = 1e-4;
     const double maxIterations = 100000;
 
@@ -39,6 +40,10 @@ int main() {
     }
 
     gradientDecent_(charges, stepSize, maxIterations);
+	timer.stopStoreTimer();
+	std::vector<float> times = timer.getTimes();
+    printVector(times);
+
 
     for (auto& charge : charges) {
         chargeX.push_back(std::sin(charge.theta) * std::cos(charge.phi));
@@ -46,15 +51,8 @@ int main() {
         chargeZ.push_back(std::cos(charge.theta));
     }
 
+
     plotresult1c_(chargeX, chargeY, chargeZ);
-    
-    // ------- exercise 2 ------ 
-    std::vector<charge> charges2(numCharges);
-    for (auto& charge2 : charges2) {
-        charge2.theta = distTheta(gen);
-        charge2.phi = distPhi(gen);
-    }
-  */  
     
     //----- exercise 3 ----------
     /*

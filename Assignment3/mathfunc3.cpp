@@ -9,6 +9,23 @@
 
 #include "mathfunc3.h"
 
+void StepTimer::startTimer() {
+    start = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration<float>(0.0f);
+}
+
+void StepTimer::stopStoreTimer() {
+    end = std::chrono::high_resolution_clock::now();
+    duration = end - start;
+    float ms = duration.count() * 1000.0f;
+
+    times.push_back(ms);
+}
+
+std::vector<float> StepTimer::getTimes() {
+    return times;
+}
+
 
 //----- Functions for exercise 1 
 

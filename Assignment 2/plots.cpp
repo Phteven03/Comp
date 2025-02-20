@@ -55,6 +55,7 @@ void plotResult2c(std::vector<double>& omega, std::vector<size_t>& iterations) {
     matplot::plot(omega, intIterations);
     matplot::xlabel("Omega");
     matplot::ylabel("Iterations");
+	matplot::title("SOR Iterations");
     matplot::grid(matplot::on);
     matplot::show();
 }

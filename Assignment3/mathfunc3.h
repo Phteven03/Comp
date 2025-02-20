@@ -4,6 +4,20 @@
 #include <cmath>
 #include <vectormath.h>
 
+
+class StepTimer {
+public:
+    void startTimer();
+    void stopStoreTimer();
+    std::vector<float> getTimes();
+private:
+    std::chrono::time_point<std::chrono::steady_clock> start;
+    std::chrono::time_point<std::chrono::steady_clock> end;
+    std::chrono::duration<float> duration;
+    std::vector<float> times;
+};
+
+
 template<typename T>
 void print(const T scalar) {
     std::cout << scalar << std::endl;
