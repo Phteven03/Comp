@@ -204,7 +204,7 @@ int main() {
     */
     
     //-------- exercise 3 ----------------
-   /*
+   
     std::vector<std::vector<double>> data = readTxt2Matrix_("xyzm_dna.txt");
 
     std::vector<double> x = data[0];
@@ -256,6 +256,7 @@ int main() {
         stiffnessMatrixDeflation = matrixMatrixSubtraction_(stiffnessMatrix, scalarMatrixMultiplication_(lambda[i], vectorVector2MatrixMultiplication_(eigenVectorMatrix[i], eigenVectorMatrix[i])));
         stiffnessMatrix = stiffnessMatrixDeflation;
     }
+
     plotResult3c(z, eigenVectorMatrix, lambda);
-    */
+    
 }

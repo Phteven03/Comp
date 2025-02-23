@@ -117,7 +117,7 @@ std::vector<double> invFFT_(std::vector<std::complex<double>> values) {
 
 std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>& values, double sampleRate, Timer* stepTimer) {
     std::vector<std::pair<double, double>> powerSpectrumVec;
-    size_t N = values.size();
+    int N = values.size();
 
     if (stepTimer) {
         stepTimer->start();
@@ -129,7 +129,7 @@ std::vector<std::pair<double, double>> powerSpectrum_(const std::vector<double>&
     double freqResolution = sampleRate / N;
 
     // Calculate power spectrum for positive frequencies
-    for (size_t i = 0; i < N / 2 + 1; ++i) {
+    for (int i = 0; i < N / 2 + 1; ++i) {
         double power = std::norm(FFTResult[i]);
         double powerSpectrumValue = power * power / (N * N);
         double currentFreq = i * freqResolution;

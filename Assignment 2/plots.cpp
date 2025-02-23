@@ -84,6 +84,9 @@ void plotResult3c(std::vector<double>& z, std::vector<std::vector<double>>& eige
 
 
     for (size_t i = 0; i < 10; ++i) {
+        std::string index = std::to_string(i);
+		std::string lm = std::to_string(eigenValues[i]);
+		std::string title = "lambda" + index + " = " + lm;
         matplot::figure(i);
         matplot::plot(zFirstStrand, firstStrandMatrix[i]);
         matplot::hold(matplot::on);
@@ -92,6 +95,7 @@ void plotResult3c(std::vector<double>& z, std::vector<std::vector<double>>& eige
         matplot::xlabel("z");
         matplot::ylabel("eigenvectors");
         matplot::legend({ "strand 1", "strand 2" });
+		matplot::title(title);
         matplot::grid(matplot::on);
         matplot::show();
 
